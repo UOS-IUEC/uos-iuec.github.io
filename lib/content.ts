@@ -278,3 +278,12 @@ export function news(): NewsItem[] {
 export function recentNews(limit = 3): NewsItem[] {
   return news().slice(0, limit);
 }
+
+/**
+ * 아직 채워지지 않은 값인지 판정한다 (CLAUDE.md §4-2).
+ * 화면에서는 감추지 말고 눈에 띄게 표시한다 — 비어 보이는 편이
+ * 완성된 것처럼 보이는 것보다 낫다. components/ContentText.tsx 참고.
+ */
+export function isTodo(value: string | null | undefined): boolean {
+  return typeof value === "string" && value.startsWith("TODO:");
+}

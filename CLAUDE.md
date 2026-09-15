@@ -10,8 +10,10 @@
 |---|---|
 | 영문 명칭 | Intelligent uWave Energy Center |
 | 국문 명칭 | 지능형 전파-에너지 연구센터 |
+| 약어 | IUEC |
 | 소속(영문) | Dept. of Electrical and Computer Engineering, University of Seoul |
 | 소속(국문) | 서울시립대학교 전자전기컴퓨터공학과 |
+| GitHub | https://github.com/UOS-IUEC |
 
 - 사이트 언어가 영어 단일이므로 **화면에 나가는 표기는 영문 명칭**을 쓴다. 국문 명칭은 `site.json`에 참고용으로만 보관한다.
 - **`HiCAS`는 구 명칭이다.** 저장소 폴더명(`Hicas_Page`)에 흔적이 남아 있을 뿐이며, 사이트 문구·컴포넌트명·URL·메타데이터 어디에도 쓰지 않는다.
@@ -139,7 +141,7 @@ public/
 
 ## 9. 아직 정하지 않은 것 (확정되면 이 문서를 갱신)
 
-- [ ] 영문 약어 표기 — `uWave` 표기 유지 여부(μWave / Microwave)와 축약형(IUEC 등) 사용할지
+- [ ] 영문 명칭의 `uWave` 표기 유지 여부 (μWave / Microwave) — 약어 `IUEC`는 확정
 - [ ] PI 정보, 연구실 주소·연락처
 - [ ] 배포처 및 도메인 → §5 제약 유지 여부
 - [ ] 로고·브랜드 컬러·폰트

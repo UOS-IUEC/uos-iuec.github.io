@@ -16,6 +16,7 @@ Next.js 16의 변경점은 `next dev`가 자동 생성·갱신하는 AGENTS.md�
 | 소속(영문) | Dept. of Electrical and Computer Engineering, University of Seoul |
 | 소속(국문) | 서울시립대학교 전자전기컴퓨터공학과 |
 | GitHub | https://github.com/UOS-IUEC |
+| 사이트 | https://uos-iuec.github.io/ (도메인 신청 중: `iuec.uos.ac.kr`) |
 
 - 사이트 언어가 영어 단일이므로 **화면에 나가는 표기는 영문 명칭**을 쓴다. 국문 명칭은 `site.json`에 참고용으로만 보관한다.
 - **`HiCAS`는 구 명칭이다.** 저장소 폴더명(`Hicas_Page`)에 흔적이 남아 있을 뿐이며, 사이트 문구·컴포넌트명·URL·메타데이터 어디에도 쓰지 않는다.
@@ -28,7 +29,7 @@ Next.js 16의 변경점은 `next dev`가 자동 생성·갱신하는 AGENTS.md�
 | 스타일 | Tailwind CSS |
 | 사이트 언어 | **영어 단일** (i18n 레이어 없음) |
 | 콘텐츠 관리 | `content/` 아래 JSON 데이터 파일 |
-| 배포 | **미정** → 정적 export 호환성을 유지할 것 (§5) |
+| 배포 | **GitHub Pages** — `main` push 시 자동 배포 (§5) |
 
 ## 2. 명령어
 
@@ -88,16 +89,20 @@ tsconfig.json · eslint.config.mjs · postcss.config.mjs
 4. **`any` 금지.** 타입이 애매하면 스키마부터 고친다.
 5. **스타일은 Tailwind 유틸리티로만.** CSS Modules, styled-components, 인라인 `style` 속성을 섞지 않는다. 색상·폰트·간격 토큰은 `app/globals.css`의 CSS 변수 한 곳에서 정의한다.
 
-## 5. 정적 export 호환 제약 (배포처 미정이므로 유지)
+## 5. 정적 export 제약
 
-배포 대상이 GitHub Pages나 학교 서버가 될 수 있으므로, 서버 런타임이 필요한 기능은 쓰지 않는다.
+GitHub Pages는 정적 파일만 서빙한다. 서버 런타임이 필요한 기능은 쓸 수 없다.
+`next.config.ts`의 `output: "export"`가 이를 빌드 단계에서 강제한다 — 아래를 어기면 빌드가 실패한다.
 
 - Route Handlers (`app/api/`), Server Actions, `middleware.ts` 사용 금지
 - `next/image`는 `unoptimized: true` 전제로 사용
 - ISR·`revalidate`·요청 시점 동적 렌더링에 의존하지 않는다
 - 문의 폼이 필요하면 `mailto:` 또는 외부 폼 서비스 링크로 처리한다
 
-배포처가 확정되면(#3) 이 절과 §1 표를 갱신한다.
+`main`에 머지되면 `.github/workflows/deploy.yml`이 빌드해서 배포한다. 수동 업로드는 없다.
+
+사이트가 아직 검색에 잡히지 않도록 `app/layout.tsx`의 루트 metadata에 `robots: { index: false }`를 걸어 두었다.
+내용이 채워지고 공개 준비가 되면 그 두 줄을 지운다.
 
 ## 6. 콘텐츠 규칙
 

@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# 같은 브랜치에 새 push가 오면 이전 실행을 취소한다 (Actions 사용 시간 절약)
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      # next build가 TypeScript 검사까지 수행하므로 typecheck는 따로 돌리지 않는다.
+      # clone 직후에는 빌드 전 typecheck가 실패한다 (CLAUDE.md §2).
+      - run: npm run build

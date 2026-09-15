@@ -1,7 +1,5 @@
 # Intelligent uWave Energy Center — Lab Homepage
 
-서울시립대학교 전자전기컴퓨터공학과 연구실 소개 웹사이트. 이 문서는 이 저장소에서 작업할 때의 기준이다.
-
 ## 0. 연구실 정보
 
 사이트 표기의 정본. 코드에 하드코딩하지 말고 `content/site.json`에 담아 쓴다.
@@ -84,7 +82,7 @@ assets-raw/             # 리사이즈 전 원본 이미지 (커밋하지 않음
 배포 대상이 GitHub Pages나 학교 서버가 될 수 있으므로, 서버 런타임이 필요한 기능은 쓰지 않는다.
 
 - Route Handlers (`app/api/`), Server Actions, `middleware.ts` 사용 금지
-- `next/image`는 `unoptimized: true` 전제로 사용 (원본 크기를 미리 적절히 줄여서 커밋)
+- `next/image`는 `unoptimized: true` 전제로 사용
 - ISR·`revalidate`·요청 시점 동적 렌더링에 의존하지 않는다
 - 문의 폼이 필요하면 `mailto:` 또는 외부 폼 서비스 링크로 처리한다
 
@@ -93,6 +91,8 @@ assets-raw/             # 리사이즈 전 원본 이미지 (커밋하지 않음
 ## 6. 콘텐츠 스키마
 
 `lib/content.ts`의 zod 스키마가 정본이다. JSON을 고칠 때 아래 형태를 따른다.
+
+> `lib/content.ts`가 만들어지면 아래 **JSON 예시는 삭제하고** 각 항목의 규칙(불릿)만 남긴다. 필드 정의가 두 곳에 있으면 반드시 어긋난다.
 
 **members.json**
 ```json
@@ -182,14 +182,10 @@ assets-raw/             # 리사이즈 전 원본 이미지 (커밋하지 않음
 | `ci` | GitHub Actions 등 |
 | `chore` | 그 외 잡무 |
 
-`content`는 Conventional Commits 표준 타입은 아니지만, 이 저장소는 데이터 갱신이 잦으므로 따로 둔다.
-
 ```
 content: add 2026 IEEE TAP paper
-content: move Gildong Hong to alumni
 feat: add publications page with year filter
 fix: correct member photo aspect ratio on mobile
-docs: document the static-export constraint
 ```
 
 ### 브랜치와 push
@@ -206,4 +202,3 @@ docs: document the static-export constraint
 
 - **이 저장소는 언제든 public으로 전환될 수 있다고 전제한다.** 개인 연락처, 미공개 과제 정보, 심사 중인 원고를 커밋하지 않는다. 한 번 커밋되면 나중에 파일을 지워도 히스토리에는 남는다.
 - API 키·토큰을 코드에 넣지 않는다. 값은 `.env.local`에만 둔다.
-- 원본 크기 이미지를 `public/`에 넣지 않는다. 원본은 `/assets-raw/`에 두고 리사이즈한 것만 커밋한다 (§7)

@@ -1,4 +1,4 @@
-# Intelligent uWave Energy Center
+# Intelligent μWave Energy Center
 
 서울시립대학교 전자전기컴퓨터공학과 **지능형 전파-에너지 연구센터(IUEC)** 홈페이지.
 

@@ -1,0 +1,54 @@
+name: Deploy
+
+# main에 반영된 내용을 GitHub Pages로 배포한다.
+# 검사(lint/build)는 ci.yml이 PR 단계에서 이미 수행한다.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포는 겹치면 안 되므로 진행 중인 것을 취소하지 않고 줄을 세운다.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # Pages가 Jekyll로 처리하지 않도록 한다. Next의 _next/ 폴더는
+      # 밑줄로 시작해서 Jekyll이 그냥 무시해 버린다.
+      - run: touch out/.nojekyll
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

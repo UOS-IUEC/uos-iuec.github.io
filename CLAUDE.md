@@ -139,7 +139,58 @@ public/
 - 디자인 시안이 없는 상태에서 만든 화면은 "임시 시안"임을 명시하고, 사용자 확인 후 다듬는다.
 - 에이전트 협업·위임 정책은 전역 `~/.agents/AGENT_ROLES.md`를 따른다. 여기에 다시 적지 않는다.
 
-## 9. 아직 정하지 않은 것 (확정되면 이 문서를 갱신)
+## 9. Git 규칙
+
+### 커밋 메시지 — Conventional Commits
+
+```
+<type>: <subject>
+
+<body>
+```
+
+- **영어**로 쓴다. 명령형 현재 시제(`add`, `added`나 `adds`가 아님), 소문자 시작, 끝에 마침표 없음
+- 제목 50자 내외, 본문은 72자에서 줄바꿈
+- 본문에는 *무엇을* 바꿨는지가 아니라 **왜** 바꿨는지를 쓴다. 무엇은 diff를 보면 된다
+- 변경이 자명하면 본문은 생략해도 된다
+
+| type | 용도 |
+|---|---|
+| `feat` | 새 기능·새 페이지 |
+| `fix` | 버그 수정 |
+| `content` | `content/*.json` 데이터 갱신 (논문·구성원·뉴스) |
+| `docs` | 문서 (CLAUDE.md, README) |
+| `style` | 포맷팅만, 동작 변화 없음 |
+| `refactor` | 동작 그대로 구조만 개선 |
+| `build` | 의존성·빌드 설정 |
+| `ci` | GitHub Actions 등 |
+| `chore` | 그 외 잡무 |
+
+`content`는 Conventional Commits 표준 타입은 아니지만, 이 저장소는 데이터 갱신이 잦으므로 따로 둔다.
+
+```
+content: add 2026 IEEE TAP paper
+content: move Gildong Hong to alumni
+feat: add publications page with year filter
+fix: correct member photo aspect ratio on mobile
+docs: document the static-export constraint
+```
+
+### 브랜치와 push
+
+- 기본 브랜치는 `main`이다.
+- 콘텐츠 갱신처럼 작고 독립적인 변경은 `main`에 직접 커밋해도 된다.
+- 페이지 추가·구조 변경은 `feat/...`, `fix/...` 브랜치에서 작업하고 PR로 합친다.
+- **이미 push한 커밋은 고치지 않는다.** 메시지 수정은 push 전에 `git commit --amend`로 한다. 공유 브랜치에 force push 금지 — 다른 사람의 로컬 히스토리가 깨진다.
+
+### 커밋하지 않는 것
+
+- 빌드 산출물·의존성 (`.next/`, `out/`, `node_modules/`) — `.gitignore`에 있음
+- 리사이즈하지 않은 원본 이미지. 원본은 `/assets-raw/`에 두고 `public/`에는 줄인 것만 넣는다 (§7)
+- `.env*`, API 키, 토큰
+- 공개되면 곤란한 정보. **이 저장소는 언제든 public으로 전환될 수 있다고 전제한다** — 개인 연락처, 미공개 과제 정보, 심사 중인 원고를 커밋하지 않는다
+
+## 10. 아직 정하지 않은 것 (확정되면 이 문서를 갱신)
 
 - [ ] 영문 명칭의 `uWave` 표기 유지 여부 (μWave / Microwave) — 약어 `IUEC`는 확정
 - [ ] PI 정보, 연구실 주소·연락처

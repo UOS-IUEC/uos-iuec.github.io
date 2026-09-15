@@ -1,0 +1,38 @@
+[
+  {
+    "id": "todo-pi",
+    "name": "TODO: PI 성함 (영문 표기)",
+    "role": "pi",
+    "title": "Professor",
+    "photo": null,
+    "email": "TODO: 확인 필요",
+    "interests": ["TODO: 확인 필요"],
+    "links": {},
+    "joined": null,
+    "left": null
+  },
+  {
+    "id": "todo-phd-1",
+    "name": "TODO: 박사과정 구성원",
+    "role": "phd",
+    "title": "Ph.D. Student",
+    "photo": null,
+    "email": "",
+    "interests": [],
+    "links": {},
+    "joined": null,
+    "left": null
+  },
+  {
+    "id": "todo-alumnus-1",
+    "name": "TODO: 졸업생",
+    "role": "alumni",
+    "title": "M.S. 2025 — TODO: 현재 소속",
+    "photo": null,
+    "email": "",
+    "interests": [],
+    "links": {},
+    "joined": null,
+    "left": "2025-02"
+  }
+]

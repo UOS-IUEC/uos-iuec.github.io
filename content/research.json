@@ -1,0 +1,16 @@
+[
+  {
+    "id": "todo-area-1",
+    "title": "TODO: 연구 분야 1",
+    "summary": "TODO: 확인 필요 — 이 분야를 두세 문장으로 설명",
+    "image": null,
+    "tags": []
+  },
+  {
+    "id": "todo-area-2",
+    "title": "TODO: 연구 분야 2",
+    "summary": "TODO: 확인 필요",
+    "image": null,
+    "tags": []
+  }
+]

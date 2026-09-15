@@ -1,0 +1,21 @@
+{
+  "name": "Intelligent uWave Energy Center",
+  "shortName": "IUEC",
+  "nameKo": "지능형 전파-에너지 연구센터",
+  "department": "Dept. of Electrical and Computer Engineering",
+  "university": "University of Seoul",
+  "tagline": "TODO: 확인 필요 — 연구실을 한 줄로 소개하는 문구",
+  "email": "TODO: 확인 필요",
+  "phone": "",
+  "address": {
+    "line1": "TODO: 확인 필요 — 건물·호실",
+    "line2": "163 Seoulsiripdae-ro, Dongdaemun-gu",
+    "city": "Seoul",
+    "country": "Republic of Korea"
+  },
+  "links": {
+    "github": "https://github.com/UOS-IUEC",
+    "scholar": "",
+    "university": "https://www.uos.ac.kr"
+  }
+}

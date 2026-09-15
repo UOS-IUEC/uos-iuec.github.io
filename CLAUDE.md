@@ -1,5 +1,9 @@
 # Intelligent uWave Energy Center — Lab Homepage
 
+Next.js 16의 변경점은 `next dev`가 자동 생성·갱신하는 AGENTS.md에 있다.
+
+@AGENTS.md
+
 ## 0. 연구실 정보
 
 사이트 표기의 정본. 코드에 하드코딩하지 말고 `content/site.json`에 담아 쓴다.
@@ -37,16 +41,18 @@ npm run typecheck  # tsc --noEmit
 
 변경 후에는 `npm run typecheck && npm run lint`를 통과시킨 뒤 보고한다.
 
-`typecheck`는 `create-next-app`이 만들어 주지 않는다. 스캐폴딩 시 `package.json`에 `"typecheck": "tsc --noEmit"`을 직접 추가할 것.
+**clone 직후에는 `npm run build`를 한 번 돌려야 `typecheck`가 통과한다.** Next.js 16이 `LayoutProps` 같은 라우트 타입을 빌드할 때 `.next/types/`에 생성하기 때문에, 빌드 전에는 tsc가 그 타입을 찾지 못하고 에러를 낸다.
 
 ## 3. 디렉터리 구조
 
 ```
 README.md               # 구성원용 안내 — 콘텐츠 수정법·실행법
 CLAUDE.md               # 이 문서 — 개발 규칙
+AGENTS.md               # Next.js가 자동 생성·갱신. 직접 고치지 않는다
 app/                    # 라우트 (페이지당 1폴더)
   layout.tsx            # 공통 셸: 헤더/푸터/메타데이터
   page.tsx              # Home
+  globals.css           # 색상·폰트 토큰 (CSS 변수는 여기 한 곳에서만)
   research/             # 연구 분야
   publications/         # 논문 목록
   members/              # 구성원
@@ -67,7 +73,12 @@ public/
   images/research/
   files/                # PDF 등 첨부물
 assets-raw/             # 리사이즈 전 원본 이미지 (커밋하지 않음)
+
+next.config.ts          # images.unoptimized — 정적 export 대비 (§5)
+tsconfig.json · eslint.config.mjs · postcss.config.mjs
 ```
+
+`components/` `content/` `lib/`와 6개 라우트 폴더는 아직 없다. 위 구조는 만들 때 따를 목표다.
 
 ## 4. 절대 규칙
 

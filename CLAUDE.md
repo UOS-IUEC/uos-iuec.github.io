@@ -99,47 +99,23 @@ tsconfig.json · eslint.config.mjs · postcss.config.mjs
 
 배포처가 확정되면(#3) 이 절과 §1 표를 갱신한다.
 
-## 6. 콘텐츠 스키마
+## 6. 콘텐츠 규칙
 
-`lib/content.ts`의 zod 스키마가 정본이다. JSON을 고칠 때 아래 형태를 따른다.
+필드 정의의 정본은 `lib/content.ts`의 zod 스키마다. 형식이 궁금하면 그 파일을 본다.
+형식이 어긋나면 빌드가 실패하면서 어느 파일 어느 항목이 틀렸는지 알려준다.
 
-> `lib/content.ts`가 만들어지면 아래 **JSON 예시는 삭제하고** 각 항목의 규칙(불릿)만 남긴다. 필드 정의가 두 곳에 있으면 반드시 어긋난다.
+여기에는 **코드를 읽어도 알 수 없는 것만** 적는다.
 
 **members.json**
-```json
-{
-  "id": "gildong-hong",
-  "name": "Gildong Hong",
-  "role": "pi | postdoc | phd | ms | undergrad | staff | alumni",
-  "title": "Ph.D. Student",
-  "photo": "/images/members/gildong-hong.jpg",
-  "email": "...",
-  "interests": ["..."],
-  "links": { "scholar": "", "github": "", "linkedin": "" },
-  "joined": "2024-03",
-  "left": null
-}
-```
-- 졸업생은 삭제하지 말고 `role: "alumni"` + `left` 채우기 (진로 정보는 `title`에)
+- 졸업생은 삭제하지 말고 `role`을 `alumni`로 바꾸고 `left`를 채운다. 진로 정보는 `title`에 적는다.
 - 표시 순서는 `role` 우선순위 → `joined` 오름차순. JSON 배열 순서에 의존하지 않는다.
 
 **publications.json**
-```json
-{
-  "id": "hong2026-example",
-  "type": "journal | conference | preprint | patent | thesis",
-  "title": "...",
-  "authors": ["Gildong Hong", "..."],
-  "venue": "IEEE Transactions on ...",
-  "year": 2026,
-  "volume": "", "pages": "",
-  "doi": "", "url": "", "pdf": "", "code": "",
-  "award": null,
-  "highlight": false
-}
-```
-- `authors`는 게재된 순서 그대로. 연구실 구성원 강조는 렌더링 단계에서 `members.json`의 이름과 매칭해 처리한다(JSON에 마크업을 넣지 않는다).
-- 기본 정렬: `year` 내림차순 → `type` 순. `highlight: true`는 홈 화면 노출용.
+- `authors`는 게재된 순서 그대로 적는다. 연구실 구성원 강조는 렌더링 단계에서 `members.json`의 이름과 매칭해 처리하므로 **JSON에 마크업을 넣지 않는다.**
+- 기본 정렬은 `year` 내림차순 → `type` 순. `highlight: true`는 홈 화면 노출용이다.
+
+**공통**
+- 아직 모르는 값은 `"TODO: ..."`로 남긴다 (§4-2). 스키마가 이 관례를 허용하므로 미확정 상태에서도 빌드가 통과한다.
 
 ## 7. 품질 기준
 

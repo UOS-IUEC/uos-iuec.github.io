@@ -39,9 +39,13 @@ npm run typecheck  # tsc --noEmit
 
 변경 후에는 `npm run typecheck && npm run lint`를 통과시킨 뒤 보고한다.
 
+`typecheck`는 `create-next-app`이 만들어 주지 않는다. 스캐폴딩 시 `package.json`에 `"typecheck": "tsc --noEmit"`을 직접 추가할 것.
+
 ## 3. 디렉터리 구조
 
 ```
+README.md               # 구성원용 안내 — 콘텐츠 수정법·실행법
+CLAUDE.md               # 이 문서 — 개발 규칙
 app/                    # 라우트 (페이지당 1폴더)
   layout.tsx            # 공통 셸: 헤더/푸터/메타데이터
   page.tsx              # Home
@@ -64,6 +68,7 @@ public/
   images/members/       # 구성원 사진
   images/research/
   files/                # PDF 등 첨부물
+assets-raw/             # 리사이즈 전 원본 이미지 (커밋하지 않음)
 ```
 
 ## 4. 절대 규칙
@@ -137,8 +142,18 @@ public/
 - 한 번에 한 페이지/한 기능씩 완성한다. 레이아웃만 여섯 페이지 만들어 두고 내용은 비워 두는 식으로 진행하지 않는다.
 - 새 의존성 추가 전에 먼저 묻는다. 기본 스택(Next/TS/Tailwind)으로 되는 일은 그대로 한다.
 - 디자인 시안이 없는 상태에서 만든 화면은 "임시 시안"임을 명시하고, 사용자 확인 후 다듬는다.
-- 확정되지 않은 결정 사항은 이 문서에 적지 않는다. GitHub Issues의 `decision` 라벨로 관리한다.
 - 에이전트 협업·위임 정책은 전역 `~/.agents/AGENT_ROLES.md`를 따른다. 여기에 다시 적지 않는다.
+
+### 무엇을 어디에 적나
+
+| 내용 | 위치 |
+|---|---|
+| 항상 지켜야 할 규칙·제약 | 이 문서 |
+| 콘텐츠 수정법·실행법 (구성원 안내) | `README.md` |
+| 확정되지 않은 결정 | GitHub Issues, `decision` 라벨 |
+| 할 일과 순서 | GitHub Issues + 마일스톤 |
+
+결론이 난 결정은 이슈를 닫고 **이 문서에 반영한다.** 이슈는 repo와 함께 사라질 수 있지만 규칙은 남아야 한다.
 
 ## 9. Git 규칙
 
@@ -182,6 +197,7 @@ docs: document the static-export constraint
 - 기본 브랜치는 `main`이다.
 - 콘텐츠 갱신처럼 작고 독립적인 변경은 `main`에 직접 커밋해도 된다.
 - 페이지 추가·구조 변경은 `feat/...`, `fix/...` 브랜치에서 작업하고 PR로 합친다.
+- 작업은 이슈 단위로 한다. PR 본문에 `Closes #12`처럼 적으면 머지될 때 해당 이슈가 자동으로 닫힌다.
 - **이미 push한 커밋은 고치지 않는다.** 메시지 수정은 push 전에 `git commit --amend`로 한다. 공유 브랜치에 force push 금지 — 다른 사람의 로컬 히스토리가 깨진다.
 
 ### 커밋 전 확인

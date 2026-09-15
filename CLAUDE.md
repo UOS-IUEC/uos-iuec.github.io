@@ -1,4 +1,4 @@
-# Intelligent uWave Energy Center — Lab Homepage
+# Intelligent μWave Energy Center — Lab Homepage
 
 Next.js 16의 변경점은 `next dev`가 자동 생성·갱신하는 AGENTS.md에 있다.
 
@@ -10,7 +10,7 @@ Next.js 16의 변경점은 `next dev`가 자동 생성·갱신하는 AGENTS.md�
 
 | 항목 | 값 |
 |---|---|
-| 영문 명칭 | Intelligent uWave Energy Center |
+| 영문 명칭 | Intelligent μWave Energy Center |
 | 국문 명칭 | 지능형 전파-에너지 연구센터 |
 | 약어 | IUEC |
 | 소속(영문) | Dept. of Electrical and Computer Engineering, University of Seoul |

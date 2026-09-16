@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="IUEC">
+  <!--
+    로고가 확정되기 전(#4)의 임시 표식이다.
+    글자를 쓰지 않고 순수 path로만 그린다 — SVG favicon 안의 <text>는
+    브라우저·OS에 따라 폰트를 못 찾아 빈 칸으로 렌더링되는 경우가 있다.
+  -->
+  <rect width="64" height="64" rx="13" fill="#17171a" />
+  <path
+    d="M10 32 q7 -13 14 0 t14 0 t14 0"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+</svg>

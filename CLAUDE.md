@@ -49,37 +49,30 @@ npm run typecheck  # tsc --noEmit
 ```
 README.md               # 구성원용 안내 — 콘텐츠 수정법·실행법
 CLAUDE.md               # 이 문서 — 개발 규칙
-AGENTS.md               # Next.js가 자동 생성·갱신. 직접 고치지 않는다
+AGENTS.md               # Next.js가 자동 생성·갱신. 직접 고치거나 지우지 않는다
 app/                    # 라우트 (페이지당 1폴더)
   layout.tsx            # 공통 셸: 헤더/푸터/메타데이터
   page.tsx              # Home
-  globals.css           # 색상·폰트 토큰 (CSS 변수는 여기 한 곳에서만)
-  research/             # 연구 분야
-  publications/         # 논문 목록
-  members/              # 구성원
-  news/                 # 소식
-  contact/              # 연락처·오시는 길
+  not-found.tsx         # 404 — 정적 export에서 out/404.html 이 된다
+  globals.css           # 색상 토큰 (CSS 변수는 여기 한 곳에서만)
+  icon.svg              # favicon. 로고 확정 시 교체 (#4)
+  research/ publications/ members/ news/ contact/
 components/             # 재사용 UI (라우트에 종속되지 않는 것만)
+  Container · PageHeader · ContentText · SiteHeader · SiteFooter
 content/                # ★ 모든 텍스트·데이터가 여기 모인다
-  site.json             # 랩 이름, 소속, 주소, 연락처, 외부 링크
-  members.json
-  publications.json
-  research.json
-  news.json
+  site.json members.json publications.json research.json news.json
 lib/
-  content.ts            # 데이터 로더 + zod 스키마 (단일 진입점)
-  utils.ts
+  content.ts            # 데이터 로더 + zod 스키마 (콘텐츠를 읽는 단일 진입점)
+  nav.ts                # 내비게이션 항목. 페이지를 추가하면 여기에도 넣는다
 public/
-  images/members/       # 구성원 사진
-  images/research/
-  files/                # PDF 등 첨부물
-assets-raw/             # 리사이즈 전 원본 이미지 (커밋하지 않음)
-
-next.config.ts          # images.unoptimized — 정적 export 대비 (§5)
-tsconfig.json · eslint.config.mjs · postcss.config.mjs
+  images/members/ images/research/ files/
+.github/workflows/
+  ci.yml                # PR마다 lint + build
+  deploy.yml            # main push 시 Pages 배포
+next.config.ts          # output: "export" — 정적 export 강제 (§5)
 ```
 
-`components/` `content/` `lib/`와 6개 라우트 폴더는 아직 없다. 위 구조는 만들 때 따를 목표다.
+라우트를 추가하면 `lib/nav.ts`에도 넣어야 헤더·푸터에 나타난다.
 
 ## 4. 절대 규칙
 

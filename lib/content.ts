@@ -232,12 +232,21 @@ export function alumni(): Member[] {
 }
 
 /**
+ * 저널마다 같은 사람의 표기가 갈린다.
+ * "Moon-Que Lee" / "Moon Que Lee", "Seon-Hwa Yun" / "Seonhwa Yun" 이 실제로 섞여 있다.
+ * publications.json에는 게재된 표기를 그대로 두고(§6), 비교할 때만 정규화한다.
+ */
+function normalizeName(value: string): string {
+  return value.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+/**
  * 논문 저자가 연구실 구성원인지 판정한다.
  * 강조 표시는 렌더링 단계에서 하고 JSON에는 마크업을 넣지 않는다 (CLAUDE.md §6).
  */
-const memberNames = new Set(allMembers.map((m) => m.name));
+const memberNames = new Set(allMembers.map((m) => normalizeName(m.name)));
 export function isMemberName(author: string): boolean {
-  return memberNames.has(author);
+  return memberNames.has(normalizeName(author));
 }
 
 function byYearThenType(a: Publication, b: Publication): number {

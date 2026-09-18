@@ -46,7 +46,7 @@ git을 설치하지 않아도 됩니다.
   "id": "hong2026-metasurface",
   "type": "journal",
   "title": "A Reconfigurable Metasurface for Wireless Power Transfer",
-  "authors": ["Gildong Hong", "Minsu Kim", "Myung-Qun Lee"],
+  "authors": ["Gildong Hong", "Minsu Kim", "Chulsoo Park"],
   "venue": "IEEE Transactions on Antennas and Propagation",
   "year": 2026,
   "volume": "74",
@@ -76,8 +76,12 @@ git을 설치하지 않아도 됩니다.
 
 ### 저자 이름 표기
 
-구성원 이름을 굵게 강조하는 건 `content/members.json` 의 `name` 과 **글자가 정확히 같을 때만** 동작합니다.
-`"Gildong Hong"` 과 `"G. Hong"` 은 다른 것으로 봅니다. 두 파일의 표기를 맞춰 주세요.
+구성원 이름을 굵게 강조하는 건 `content/members.json` 의 `name` 과 대조해서 동작합니다.
+하이픈과 띄어쓰기는 무시하므로 `"Moon-Que Lee"` 와 `"Moon Que Lee"` 는 같은 사람으로 봅니다
+(저널마다 표기가 갈려서 그렇습니다).
+
+다만 **철자가 다르면 못 알아봅니다.** `"Gildong Hong"` 과 `"G. Hong"` 은 다른 사람입니다.
+논문에 이니셜로 실렸다면 구성원 이름 쪽을 그 표기에 맞추거나, 강조를 포기해야 합니다.
 
 ---
 
@@ -215,7 +219,7 @@ Node.js 22 이상이 필요합니다.
 
 ```bash
 git clone https://github.com/UOS-IUEC/uos-iuec.github.io.git
-cd homepage
+cd uos-iuec.github.io
 npm install
 npm run build     # 최초 1회 필요 (아래 참고)
 npm run dev       # http://localhost:3000

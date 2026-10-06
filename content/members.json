@@ -1,11 +1,11 @@
 [
   {
-    "id": "todo-pi",
-    "name": "TODO: PI 성함 (영문 표기)",
+    "id": "moon-que-lee",
+    "name": "Moon-Que Lee",
     "role": "pi",
     "title": "Professor",
-    "photo": null,
-    "email": "TODO: 확인 필요",
+    "photo": "/images/members/moon-que-lee.jpg",
+    "email": "mqlee@uos.ac.kr",
     "interests": ["TODO: 확인 필요"],
     "links": {},
     "joined": null,

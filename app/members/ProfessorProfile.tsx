@@ -1,0 +1,131 @@
+import Image from "next/image";
+
+import L, { LBlock } from "@/components/L";
+import type { Localized, Professor } from "@/lib/content";
+
+type TimelineRow = { key: string; when: string; text: Localized };
+
+/** 기간 | 내용 두 열. 좁은 화면에서는 기간이 위로 올라간다. */
+function Timeline({ id, title, rows }: { id: string; title: Localized; rows: TimelineRow[] }) {
+  if (rows.length === 0) return null;
+
+  return (
+    <section aria-labelledby={id}>
+      <h4 id={id} className="border-b border-line pb-2 text-sm font-semibold text-ink">
+        <L {...title} />
+      </h4>
+      <ul className="mt-3 space-y-2.5">
+        {rows.map((row) => (
+          <li
+            key={row.key}
+            className="grid gap-x-6 gap-y-0.5 text-sm leading-relaxed sm:grid-cols-[9.5rem_1fr]"
+          >
+            <span className="tabular-nums text-ink-muted">{row.when}</span>
+            <span className="break-keep text-ink">
+              <L {...row.text} />
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function Interests({ items }: { items: string[] }) {
+  if (items.length === 0) return null;
+  return (
+    <ul className="flex flex-wrap gap-2">
+      {items.map((interest) => (
+        <li
+          key={interest}
+          className="rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent"
+        >
+          {interest}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Members 상단의 교수 소개. 언어는 헤더의 전환 버튼을 따른다. */
+export default function ProfessorProfile({ professor }: { professor: Professor }) {
+  return (
+    <section id="professor" aria-labelledby="professor-heading" className="scroll-mt-24">
+      <h2
+        id="professor-heading"
+        className="border-b border-line pb-3 text-xl font-semibold tracking-tight sm:text-2xl"
+      >
+        <L en="Professor" ko="교수" />
+      </h2>
+
+      <div className="mt-8 grid gap-8 md:grid-cols-[14rem_1fr] md:gap-12">
+        {professor.photo ? (
+          <Image
+            src={professor.photo.src}
+            alt={`Portrait of ${professor.name.en}`}
+            width={professor.photo.width}
+            height={professor.photo.height}
+            priority
+            className="h-auto w-full max-w-56 rounded-lg border border-line"
+          />
+        ) : null}
+
+        <div className="min-w-0">
+          <h3 className="text-2xl font-semibold tracking-tight">
+            <L {...professor.name} />
+          </h3>
+          <p className="mt-1 break-keep text-ink-muted">
+            <L {...professor.title} /> &middot; <L {...professor.affiliation} />
+          </p>
+          {professor.email ? (
+            <p className="mt-2 text-sm">
+              <a className="text-accent hover:underline" href={`mailto:${professor.email}`}>
+                {professor.email}
+              </a>
+            </p>
+          ) : null}
+
+          <section aria-labelledby="professor-interests" className="mt-6">
+            <h4 id="professor-interests" className="sr-only">
+              <L en="Research Interests" ko="관심 분야" />
+            </h4>
+            <LBlock
+              en={<Interests items={professor.interests.en} />}
+              ko={<Interests items={professor.interests.ko} />}
+            />
+          </section>
+
+          <div className="mt-10 space-y-10">
+            <Timeline
+              id="professor-experience"
+              title={{ en: "Experience", ko: "경력" }}
+              rows={professor.experience.map((row) => ({
+                key: row.period,
+                when: row.period,
+                text: { en: row.en, ko: row.ko },
+              }))}
+            />
+            <Timeline
+              id="professor-education"
+              title={{ en: "Education", ko: "학력" }}
+              rows={professor.education.map((row) => ({
+                key: row.period,
+                when: row.period,
+                text: { en: row.en, ko: row.ko },
+              }))}
+            />
+            <Timeline
+              id="professor-awards"
+              title={{ en: "Awards", ko: "수상 경력" }}
+              rows={professor.awards.map((row, index) => ({
+                key: `${row.date}-${index}`,
+                when: row.date,
+                text: { en: row.en, ko: row.ko },
+              }))}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

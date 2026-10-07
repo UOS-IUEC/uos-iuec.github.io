@@ -1,0 +1,107 @@
+{
+  "name": { "en": "Moon-Que Lee", "ko": "이문규" },
+  "title": { "en": "Professor", "ko": "교수" },
+  "affiliation": {
+    "en": "School of Electrical and Computer Engineering, University of Seoul",
+    "ko": "서울시립대학교 전자전기컴퓨터공학부"
+  },
+  "email": "mqlee@uos.ac.kr",
+  "photo": {
+    "src": "/images/members/moon-que-lee.jpg",
+    "width": 400,
+    "height": 483
+  },
+  "interests": {
+    "en": [
+      "RF component and system design: radar, transceivers",
+      "RFIC and MMIC design",
+      "Quadrifilar antennas"
+    ],
+    "ko": [
+      "RF 부품 및 시스템 설계: Radar, Transceiver",
+      "RFIC, MMIC 설계",
+      "Quadrifilar 안테나"
+    ]
+  },
+  "experience": [
+    {
+      "period": "2002.03 – Present",
+      "en": "Professor, School of Electrical and Computer Engineering, University of Seoul",
+      "ko": "서울시립대학교 전자전기컴퓨터공학부 교수"
+    },
+    {
+      "period": "2015.11 – 2018.02",
+      "en": "Radio & Satellite PM/CP (National R&D Planning), Ministry of Science and ICT",
+      "ko": "과학기술정보통신부 전파위성PM/CP (국가 R&D 기획)"
+    },
+    {
+      "period": "1999.03 – 2002.02",
+      "en": "Senior Researcher, Satellite Communication Components Laboratory, Electronics and Telecommunications Research Institute (ETRI)",
+      "ko": "한국전자통신연구원 위성통신부품연구실 선임연구원"
+    }
+  ],
+  "education": [
+    {
+      "period": "1994.03 – 1999.02",
+      "en": "Ph.D., School of Electrical Engineering, Seoul National University",
+      "ko": "서울대학교 전기공학부 박사"
+    },
+    {
+      "period": "1992.03 – 1994.02",
+      "en": "M.S., Department of Electronics Engineering, Seoul National University",
+      "ko": "서울대학교 전자공학과 석사"
+    },
+    {
+      "period": "1988.03 – 1992.02",
+      "en": "B.S., Department of Electrical and Electronic Engineering, KAIST",
+      "ko": "한국과학기술원 전기및전자공학과 학사"
+    }
+  ],
+  "awards": [
+    {
+      "date": "2015",
+      "en": "Ministerial Commendation for Contributions to Radio Industry Promotion, Ministry of Science, ICT and Future Planning",
+      "ko": "전파산업활성화 미래창조과학부 장관 공로 표창"
+    },
+    {
+      "date": "2014",
+      "en": "Excellence Award, Future Radio Creative Design & Fabrication Contest",
+      "ko": "미래전파 창의·설계제작 경진대회 우수상"
+    },
+    {
+      "date": "2013",
+      "en": "Best Student Paper Award (2 papers), APMC",
+      "ko": "APMC Best Student Paper Award (2편)"
+    },
+    {
+      "date": "2013",
+      "en": "Best Award, IEEE International Conference on RFID",
+      "ko": "IEEE International Conference on RFID, Best Award"
+    },
+    {
+      "date": "2012",
+      "en": "Best Paper Award, Korean Institute of Electromagnetic Engineering and Science",
+      "ko": "전자파학회 최우수논문상"
+    },
+    {
+      "date": "2010.10",
+      "en": "Excellence Award, 6th RFID/USN Research Paper Contest",
+      "ko": "제6회 RFID/USN 연구 논문 공모전 우수상"
+    },
+    {
+      "date": "2008.10",
+      "en": "Excellence Award (President of KETI Award), 4th RFID/USN Research Paper Contest — paper: a UHF RFID reader front-end with excellent Tx/Rx isolation against load variation",
+      "ko": "제4회 RFID/USN 연구 논문 공모전 우수상 [전자부품연구원장] — 논문: 로드 변화에 대해 우수한 송수신 격리 특성을 가지는 UHF RFID 리더 전치단"
+    },
+    {
+      "date": "2006.11",
+      "en": "Best Paper Award in RFID Technology (Minister of Information and Communication Award), hosted by the Ministry of Information and Communication — paper: \"A lumped element circulator with high isolation for UHF RFID\"",
+      "ko": "정보통신부 주최 RFID 기술 부문 최우수 논문상 (정보통신부 장관상) — 논문: \"A lumped element circulator with high isolation for UHF RFID\""
+    },
+    {
+      "date": "2006",
+      "en": "Academic Award, The Korea Institute of Intelligent Transport Systems",
+      "ko": "ITS학회 학술상"
+    }
+  ]
+}

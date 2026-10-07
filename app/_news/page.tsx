@@ -47,8 +47,11 @@ export default function NewsPage() {
   return (
     <>
       <PageHeader
-        title="News"
-        lead="Announcements, awards, talks and other updates from the lab."
+        title={{ en: "News", ko: "소식" }}
+        lead={{
+          en: "Announcements, awards, talks and other updates from the lab.",
+          ko: "연구실의 공지, 수상, 발표 등 새로운 소식입니다.",
+        }}
       />
 
       <Container className="py-12 sm:py-16">

@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 
-import type { Publication, PublicationType } from "@/lib/content";
+import L from "@/components/L";
+import type { Localized, Publication, PublicationPeriod, PublicationType } from "@/lib/content";
 
 import PublicationEntry from "./PublicationEntry";
 
 type YearGroup = { year: number; items: Publication[] };
-type TypeOption = { value: PublicationType; label: string };
+type TypeOption = { value: PublicationType; label: Localized };
 
 /** "전부 보기" 상태. PublicationType 값과 겹치지 않아야 한다. */
 const ALL = "all";
@@ -24,11 +25,14 @@ function filterButtonClass(selected: boolean): string {
 }
 
 /** 필터를 바꿨을 때 몇 건이 남았는지 알려준다 (aria-live로 읽힌다). */
-function countLabel(shown: number, total: number): string {
+function countLabel(shown: number, total: number): Localized {
   if (shown === total) {
-    return `${total} ${total === 1 ? "publication" : "publications"}`;
+    return {
+      en: `${total} ${total === 1 ? "publication" : "publications"}`,
+      ko: `논문 ${total}편`,
+    };
   }
-  return `${shown} of ${total} publications`;
+  return { en: `${shown} of ${total} publications`, ko: `${total}편 중 ${shown}편` };
 }
 
 /**
@@ -38,36 +42,64 @@ function countLabel(shown: number, total: number): string {
 export default function PublicationBrowser({
   groups,
   types,
+  periods,
 }: {
   groups: YearGroup[];
   types: TypeOption[];
+  periods: PublicationPeriod[];
 }) {
   const [selected, setSelected] = useState<Selection>(ALL);
+  // 처음에는 아무 구간도 고르지 않은 상태(전부 보기). 고른 버튼을 다시 누르면 해제된다.
+  const [period, setPeriod] = useState<PublicationPeriod | null>(null);
 
   // 타입이 한 종류뿐이면 고를 것이 없으므로 필터를 아예 그리지 않는다.
   const showFilter = types.length > 1;
 
-  // 선택한 타입만 남기고, 그 결과 빈 연도가 생기면 연도째 뺀다.
-  const visible =
-    selected === ALL
-      ? groups
-      : groups
-          .map((group) => ({
-            year: group.year,
-            items: group.items.filter((item) => item.type === selected),
-          }))
-          .filter((group) => group.items.length > 0);
+  // 연도 구간 → 타입 순으로 거르고, 그 결과 빈 연도가 생기면 연도째 뺀다.
+  const visible = groups
+    .filter(
+      (group) =>
+        period === null ||
+        (group.year >= period.from && (period.to === null || group.year <= period.to)),
+    )
+    .map((group) => ({
+      year: group.year,
+      items:
+        selected === ALL ? group.items : group.items.filter((item) => item.type === selected),
+    }))
+    .filter((group) => group.items.length > 0);
 
   const total = groups.reduce((sum, group) => sum + group.items.length, 0);
   const shown = visible.reduce((sum, group) => sum + group.items.length, 0);
 
   return (
     <div>
+      <div
+        role="group"
+        aria-label="Filter by year range / 연도 구간"
+        className="mb-6 flex flex-wrap gap-2"
+      >
+        {periods.map((option) => {
+          const isSelected = period?.id === option.id;
+          return (
+            <button
+              key={option.id}
+              type="button"
+              aria-pressed={isSelected}
+              onClick={() => setPeriod(isSelected ? null : option)}
+              className={filterButtonClass(isSelected)}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
         {showFilter ? (
           <div
             role="group"
-            aria-label="Filter by publication type"
+            aria-label="Filter by publication type / 논문 종류"
             className="flex flex-wrap gap-2"
           >
             <button
@@ -76,7 +108,7 @@ export default function PublicationBrowser({
               onClick={() => setSelected(ALL)}
               className={filterButtonClass(selected === ALL)}
             >
-              All
+              <L en="All" ko="전체" />
             </button>
             {types.map((type) => (
               <button
@@ -86,20 +118,20 @@ export default function PublicationBrowser({
                 onClick={() => setSelected(type.value)}
                 className={filterButtonClass(selected === type.value)}
               >
-                {type.label}
+                <L {...type.label} />
               </button>
             ))}
           </div>
         ) : null}
 
         <p aria-live="polite" className="text-sm text-ink-muted">
-          {countLabel(shown, total)}
+          <L {...countLabel(shown, total)} />
         </p>
       </div>
 
       {visible.length === 0 ? (
         <p className="mt-10 rounded-lg border border-dashed border-line bg-surface px-5 py-12 text-center text-ink-muted">
-          No publications match this filter.
+          <L en="No publications match this filter." ko="조건에 맞는 논문이 없습니다." />
         </p>
       ) : (
         <div className="mt-10 space-y-12 sm:mt-12">

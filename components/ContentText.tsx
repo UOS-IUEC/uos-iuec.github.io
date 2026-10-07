@@ -1,4 +1,4 @@
-import { isTodo } from "@/lib/content";
+import { isTodo } from "@/lib/todo";
 
 /**
  * 콘텐츠 문자열을 그린다.

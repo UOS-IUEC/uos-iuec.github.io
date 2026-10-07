@@ -13,12 +13,12 @@ Next.js 16의 변경점은 `next dev`가 자동 생성·갱신하는 AGENTS.md�
 | 영문 명칭 | Intelligent μWave Energy Center |
 | 국문 명칭 | 지능형 전파-에너지 연구센터 |
 | 약어 | IUEC |
-| 소속(영문) | Dept. of Electrical and Computer Engineering, University of Seoul |
-| 소속(국문) | 서울시립대학교 전자전기컴퓨터공학과 |
+| 소속(영문) | School of Electrical and Computer Engineering, University of Seoul |
+| 소속(국문) | 서울시립대학교 전자전기컴퓨터공학부 |
 | GitHub | https://github.com/UOS-IUEC |
 | 사이트 | https://uos-iuec.github.io/ (도메인 신청 중: `iuec.uos.ac.kr`) |
 
-- 사이트 언어가 영어 단일이므로 **화면에 나가는 표기는 영문 명칭**을 쓴다. 국문 명칭은 `site.json`에 참고용으로만 보관한다.
+- 연구실 이름은 한국어 화면에서도 **영문 명칭**을 쓴다. 국문 명칭은 `site.json`에 참고용으로만 보관한다.
 - **`HiCAS`는 구 명칭이다.** 저장소 폴더명(`Hicas_Page`)에 흔적이 남아 있을 뿐이며, 사이트 문구·컴포넌트명·URL·메타데이터 어디에도 쓰지 않는다.
 
 ## 1. 기본 결정 사항
@@ -27,9 +27,17 @@ Next.js 16의 변경점은 `next dev`가 자동 생성·갱신하는 AGENTS.md�
 |---|---|
 | 프레임워크 | Next.js (App Router) + TypeScript (strict) |
 | 스타일 | Tailwind CSS |
-| 사이트 언어 | **영어 단일** (i18n 레이어 없음) |
+| 사이트 언어 | **영어 기본 + 한국어 전환.** 헤더의 EN/KO 버튼이 사이트 전체를 바꾸고 선택은 브라우저에 저장된다. URL은 언어별로 나뉘지 않는다(아래 참고) |
 | 콘텐츠 관리 | `content/` 아래 JSON 데이터 파일 |
 | 배포 | **GitHub Pages** — `main` push 시 자동 배포 (§5) |
+
+### 한/영 전환 규칙
+
+- **번역하지 않는 것:** 연구실 이름(`site.name`), 논문 본문(제목·저자·게재지). 메타데이터(title·description)와 이미지 alt도 영문만 쓴다.
+- **그 밖의 화면 텍스트는 모두 en/ko 한 쌍**으로 둔다. 콘텐츠는 JSON에 `{ "en": ..., "ko": ... }`로, UI 문구는 컴포넌트에서 `<L en="..." ko="..." />`로.
+- **동작 방식:** 페이지는 두 언어를 모두 HTML에 담고, `<html data-lang>`에 따라 CSS가 하나를 숨긴다(`components/L.tsx`, `globals.css`의 `ko:` 변형, `lib/lang.ts`). 정적 export라 서버가 언어를 알 수 없어서 고른 방식이다. 언어별 URL(`/ko/...`)이 필요해지면 구조를 바꿔야 한다.
+- 언어마다 구조가 다른 블록(목록 등)은 `LBlock`, 한쪽 언어에만 있는 블록은 `hidden ko:block` / `ko:hidden`.
+- 특허는 영문 명칭 확정 전까지 한국어 화면에서만 보인다.
 
 ## 2. 명령어
 
@@ -56,14 +64,18 @@ app/                    # 라우트 (페이지당 1폴더)
   not-found.tsx         # 404 — 정적 export에서 out/404.html 이 된다
   globals.css           # 색상 토큰 (CSS 변수는 여기 한 곳에서만)
   icon.svg              # favicon. 로고 확정 시 교체 (#4)
-  research/ publications/ members/ news/ contact/
+  research/ publications/ members/ contact/
+  _news/                # News — 소식이 생길 때까지 숨김(밑줄 폴더는 라우트가 되지 않는다)
 components/             # 재사용 UI (라우트에 종속되지 않는 것만)
   Container · PageHeader · ContentText · SiteHeader · SiteFooter
+  L (한/영 텍스트) · LanguageToggle (헤더의 EN/KO 버튼)
 content/                # ★ 모든 텍스트·데이터가 여기 모인다
   site.json members.json publications.json research.json news.json
 lib/
   content.ts            # 데이터 로더 + zod 스키마 (콘텐츠를 읽는 단일 진입점)
   nav.ts                # 내비게이션 항목. 페이지를 추가하면 여기에도 넣는다
+  lang.ts               # 한/영 전환 상태(<html data-lang>, localStorage)
+  todo.ts               # isTodo — 클라이언트에서도 가볍게 쓰도록 분리
 public/
   images/members/ images/research/ files/
 .github/workflows/
@@ -106,7 +118,8 @@ GitHub Pages는 정적 파일만 서빙한다. 서버 런타임이 필요한 기
 
 **members.json**
 - 졸업생은 삭제하지 말고 `role`을 `alumni`로 바꾸고 `left`를 채운다. 진로 정보는 `title`에 적는다.
-- 표시 순서는 `role` 우선순위 → `joined` 오름차순. JSON 배열 순서에 의존하지 않는다.
+- 표시 순서는 `role` 우선순위 → `joined` 오름차순. `joined`가 같거나 비어 있으면 JSON에 적힌 순서를 따른다.
+- `name`은 영문 표기(성 먼저도 가능), `nameKo`는 한국어 화면용이다. 논문 저자 강조는 성 먼저/나중 어느 순서로 적혀도 매칭된다.
 
 **publications.json**
 - `authors`는 게재된 순서 그대로 적는다. 연구실 구성원 강조는 렌더링 단계에서 `members.json`의 이름과 매칭해 처리하므로 **JSON에 마크업을 넣지 않는다.**

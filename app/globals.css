@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/*
+ * 한/영 전환 (CLAUDE.md §1). <html data-lang="ko">일 때만 붙는 변형.
+ * 영어가 기본이므로 영어 요소에 ko:hidden, 한국어 요소에 hidden ko:inline(또는 ko:block)을 준다.
+ * 보통은 직접 쓰지 말고 components/L.tsx를 쓴다.
+ */
+@custom-variant ko (&:where([data-lang="ko"], [data-lang="ko"] *));
+
 /* ---------------------------------------------------------------------------
  * 색상·간격 토큰은 여기 한 곳에서만 정의한다 (CLAUDE.md §4-5).
  *

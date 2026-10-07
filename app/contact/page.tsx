@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 
 import Container from "@/components/Container";
 import ContentText from "@/components/ContentText";
+import L, { LBlock } from "@/components/L";
 import PageHeader from "@/components/PageHeader";
-import { isTodo, site } from "@/lib/content";
+import { isTodo, site, type Localized } from "@/lib/content";
 
 /**
  * 확정된 연락 수단만 설명에 열거한다. 빈 값은 행 자체가 없고 미확정 값은 TODO 문구로만
@@ -18,7 +19,7 @@ const listedDetails = [
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: `How to reach the ${site.name} (${site.shortName}) at the ${site.department}, ${site.university} — ${listedDetails.join(", ")}.`,
+  description: `How to reach the ${site.name} (${site.shortName}) at the ${site.department.en}, ${site.university.en} — ${listedDetails.join(", ")}.`,
 };
 
 /**
@@ -26,11 +27,23 @@ export const metadata: Metadata = {
  * 소속 대학명은 콘텐츠이므로 site.json에서 가져온다(§4-1).
  * 비어 있거나 아직 미확정("TODO: ...")인 주소는 링크로 만들지 않는다.
  */
-const EXTERNAL_LINKS = [
+const EXTERNAL_LINKS: ReadonlyArray<{ key: "university" | "github" | "scholar"; label: Localized }> = [
   { key: "university", label: site.university },
-  { key: "github", label: "GitHub" },
-  { key: "scholar", label: "Google Scholar" },
-] as const;
+  { key: "github", label: { en: "GitHub", ko: "GitHub" } },
+  { key: "scholar", label: { en: "Google Scholar", ko: "Google Scholar" } },
+];
+
+function AddressLines({ lines }: { lines: string[] }) {
+  return (
+    <address className="mt-5 space-y-1 not-italic leading-relaxed">
+      {lines.map((line, index) => (
+        <div key={`${index}-${line}`} className="break-words">
+          <ContentText value={line} />
+        </div>
+      ))}
+    </address>
+  );
+}
 
 export default function ContactPage() {
   const externalLinks = EXTERNAL_LINKS.map((link) => ({
@@ -38,16 +51,9 @@ export default function ContactPage() {
     href: site.links[link.key] ?? "",
   })).filter((link) => link.href !== "" && !isTodo(link.href));
 
-  // 빈 줄은 건너뛴다. 값이 아직 미확정이면 표시는 ContentText가 맡는다.
-  const addressLines = [
-    site.address.line1,
-    site.address.line2,
-    site.address.city,
-    site.address.country,
-  ].filter((line) => line !== "");
-
   const hasEmail = site.email !== "";
   const hasPhone = site.phone !== "";
+  const hasAddress = site.address.en.length > 0 || site.address.ko.length > 0;
 
   // 미확정 값으로는 mailto:/tel: 주소를 만들 수 없다. 그때는 값만 그대로 보여준다.
   const mailtoHref = hasEmail && !isTodo(site.email) ? `mailto:${site.email}` : "";
@@ -57,15 +63,18 @@ export default function ContactPage() {
   return (
     <>
       <PageHeader
-        title="Contact"
-        lead="Questions about our research and possible collaborations are welcome. Email is the fastest way to reach us."
+        title={{ en: "Contact", ko: "연락처" }}
+        lead={{
+          en: "Questions about our research and possible collaborations are welcome. Email is the fastest way to reach us.",
+          ko: "연구 내용이나 협력에 관한 문의를 환영합니다. 이메일로 연락 주시면 가장 빠르게 답변드릴 수 있습니다.",
+        }}
       />
 
       <Container className="py-12 sm:py-16">
         <div className="grid gap-12 md:grid-cols-2 md:gap-16">
           <section aria-labelledby="contact-details">
             <h2 id="contact-details" className="text-xl font-semibold tracking-tight">
-              Get in touch
+              <L en="Get in touch" ko="문의하기" />
             </h2>
 
             {hasEmail || hasPhone ? (
@@ -73,7 +82,7 @@ export default function ContactPage() {
                 {hasEmail ? (
                   <div className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:gap-6">
                     <dt className="shrink-0 text-sm font-medium text-ink-muted sm:w-20">
-                      Email
+                      <L en="Email" ko="이메일" />
                     </dt>
                     <dd className="min-w-0 break-words">
                       {mailtoHref ? (
@@ -93,7 +102,7 @@ export default function ContactPage() {
                 {hasPhone ? (
                   <div className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:gap-6">
                     <dt className="shrink-0 text-sm font-medium text-ink-muted sm:w-20">
-                      Phone
+                      <L en="Phone" ko="전화" />
                     </dt>
                     <dd className="min-w-0 break-words">
                       {telHref ? (
@@ -112,49 +121,48 @@ export default function ContactPage() {
               </dl>
             ) : (
               <p className="mt-5 text-ink-muted">
-                Contact details for the lab have not been published yet.
+                <L
+                  en="Contact details for the lab have not been published yet."
+                  ko="연구실 연락처가 아직 등록되지 않았습니다."
+                />
               </p>
             )}
 
             {/* 정적 사이트라 문의 폼을 둘 수 없다 (CLAUDE.md §5). 대신 메일로 안내한다. */}
             <div className="mt-8 rounded-lg border border-line bg-surface p-5">
-              <h3 className="text-sm font-semibold">Sending an inquiry</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                This site has no contact form. Please write to us directly — a short note on
-                your affiliation and what you are interested in helps us reply faster.
+              <h3 className="text-sm font-semibold">
+                <L en="Sending an inquiry" ko="문의 안내" />
+              </h3>
+              <p className="mt-2 break-keep text-sm leading-relaxed text-ink-muted">
+                <L
+                  en="This site has no contact form. Please write to us directly — a short note on your affiliation and what you are interested in helps us reply faster."
+                  ko="이 사이트에는 문의 양식이 없습니다. 이메일로 직접 연락해 주세요. 소속과 관심 있는 내용을 간단히 적어 주시면 더 빠르게 답변드릴 수 있습니다."
+                />
               </p>
-              {mailtoHref ? (
-                <a
-                  className="mt-4 inline-block rounded-md bg-accent px-4 py-2 text-sm font-medium text-canvas hover:opacity-90"
-                  href={mailtoHref}
-                >
-                  Email {site.shortName}
-                </a>
-              ) : null}
             </div>
           </section>
 
           <section aria-labelledby="contact-address">
             <h2 id="contact-address" className="text-xl font-semibold tracking-tight">
-              Address
+              <L en="Address" ko="주소" />
             </h2>
             <p className="mt-2 text-sm text-ink-muted">
-              {site.department}
+              <L {...site.department} />
               <br />
-              {site.university}
+              <L {...site.university} />
             </p>
 
-            {addressLines.length > 0 ? (
-              <address className="mt-5 space-y-1 not-italic leading-relaxed">
-                {addressLines.map((line, index) => (
-                  <div key={`${index}-${line}`} className="break-words">
-                    <ContentText value={line} />
-                  </div>
-                ))}
-              </address>
+            {hasAddress ? (
+              <LBlock
+                en={<AddressLines lines={site.address.en} />}
+                ko={<AddressLines lines={site.address.ko} />}
+              />
             ) : (
               <p className="mt-5 text-ink-muted">
-                The lab address has not been published yet.
+                <L
+                  en="The lab address has not been published yet."
+                  ko="연구실 주소가 아직 등록되지 않았습니다."
+                />
               </p>
             )}
           </section>
@@ -165,7 +173,7 @@ export default function ContactPage() {
           className="mt-14 border-t border-line pt-10"
         >
           <h2 id="contact-elsewhere" className="text-xl font-semibold tracking-tight">
-            Elsewhere online
+            <L en="Elsewhere online" ko="온라인 채널" />
           </h2>
 
           {externalLinks.length > 0 ? (
@@ -178,7 +186,9 @@ export default function ContactPage() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <span className="truncate">{link.label}</span>
+                    <span className="truncate">
+                      <L {...link.label} />
+                    </span>
                     <svg
                       width="14"
                       height="14"
@@ -201,7 +211,10 @@ export default function ContactPage() {
             </ul>
           ) : (
             <p className="mt-5 text-ink-muted">
-              No external profiles are listed for the lab yet.
+              <L
+                en="No external profiles are listed for the lab yet."
+                ko="등록된 외부 채널이 아직 없습니다."
+              />
             </p>
           )}
         </section>

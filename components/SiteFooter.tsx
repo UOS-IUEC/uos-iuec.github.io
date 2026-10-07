@@ -2,22 +2,29 @@ import Link from "next/link";
 
 import Container from "@/components/Container";
 import ContentText from "@/components/ContentText";
-import { isTodo, site } from "@/lib/content";
+import L, { LBlock } from "@/components/L";
+import { isTodo, site, type Localized } from "@/lib/content";
 import { NAV_ITEMS } from "@/lib/nav";
 
-const EXTERNAL_LINKS = [
-  { key: "university", label: "University of Seoul" },
-  { key: "github", label: "GitHub" },
-  { key: "scholar", label: "Google Scholar" },
-] as const;
+const EXTERNAL_LINKS: ReadonlyArray<{ key: "university" | "github" | "scholar"; label: Localized }> = [
+  { key: "university", label: site.university },
+  { key: "github", label: { en: "GitHub", ko: "GitHub" } },
+  { key: "scholar", label: { en: "Google Scholar", ko: "Google Scholar" } },
+];
+
+function AddressLines({ lines }: { lines: string[] }) {
+  return (
+    <>
+      {lines.map((line) => (
+        <div key={line}>
+          <ContentText value={line} />
+        </div>
+      ))}
+    </>
+  );
+}
 
 export default function SiteFooter() {
-  const addressLines = [
-    site.address.line1,
-    site.address.line2,
-    [site.address.city, site.address.country].filter(Boolean).join(", "),
-  ].filter(Boolean);
-
   const external = EXTERNAL_LINKS.map((link) => ({
     ...link,
     href: site.links[link.key] ?? "",
@@ -29,17 +36,16 @@ export default function SiteFooter() {
         <div>
           <p className="font-semibold tracking-tight">{site.name}</p>
           <p className="mt-1 text-sm text-ink-muted">
-            {site.department}
+            <L {...site.department} />
             <br />
-            {site.university}
+            <L {...site.university} />
           </p>
 
           <address className="mt-4 space-y-0.5 text-sm not-italic text-ink-muted">
-            {addressLines.map((line) => (
-              <div key={line}>
-                <ContentText value={line} />
-              </div>
-            ))}
+            <LBlock
+              en={<AddressLines lines={site.address.en} />}
+              ko={<AddressLines lines={site.address.ko} />}
+            />
             {site.email ? (
               <div className="pt-1">
                 {isTodo(site.email) ? (
@@ -60,7 +66,7 @@ export default function SiteFooter() {
               {NAV_ITEMS.map((item) => (
                 <li key={item.href}>
                   <Link className="text-ink-muted hover:text-accent" href={item.href}>
-                    {item.label}
+                    <L {...item.label} />
                   </Link>
                 </li>
               ))}
@@ -77,7 +83,7 @@ export default function SiteFooter() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {link.label}
+                    <L {...link.label} />
                   </a>
                 </li>
               ))}

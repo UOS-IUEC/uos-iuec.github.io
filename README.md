@@ -1,6 +1,6 @@
 # Intelligent μWave Energy Center
 
-서울시립대학교 전자전기컴퓨터공학과 **지능형 전파-에너지 연구센터(IUEC)** 홈페이지.
+서울시립대학교 전자전기컴퓨터공학부 **지능형 전파-에너지 연구센터(IUEC)** 홈페이지.
 
 **https://uos-iuec.github.io/**
 
@@ -20,6 +20,7 @@
 | 구성원·졸업생 | `content/members.json` |
 | 소식·공지 | `content/news.json` |
 | 연구 분야 | `content/research.json` |
+| 특허 | `content/patents.json` — 제목·영문 제목·번호는 KIPRIS 기록 그대로. 지금은 화면에 표시하지 않고 기록으로만 둔다 |
 | 연구실 이름·주소·연락처 | `content/site.json` |
 
 ## 가장 쉬운 방법 — 브라우저에서 바로 고치기
@@ -64,7 +65,7 @@ git을 설치하지 않아도 됩니다.
 |---|---|
 | `id` | 겹치지 않는 아무 문자열. `성2026-키워드` 형태를 권장 |
 | `type` | `journal` `conference` `preprint` `patent` `thesis` 중 하나 |
-| `authors` | **게재된 순서 그대로.** 연구실 구성원 이름은 사이트가 알아서 굵게 표시합니다 |
+| `authors` | **게재된 순서·표기 그대로.** 모든 저자가 같은 굵기로 표시됩니다 |
 | `year` | 따옴표 없는 숫자. `2026` (O) / `"2026"` (X) |
 | `volume` | **숫자만.** `"74"` (O) / `"vol. 74"` (X) — `vol.`은 화면에서 자동으로 붙습니다 |
 | `pages` | `"1234-1240"` |
@@ -73,15 +74,6 @@ git을 설치하지 않아도 됩니다.
 | `highlight` | `true` 면 홈 화면에 노출됩니다. 대표 논문 2~3편만 |
 
 모르는 항목은 `""` 로 비워두면 화면에서 알아서 빠집니다. **없는 정보를 지어내지 마세요.**
-
-### 저자 이름 표기
-
-구성원 이름을 굵게 강조하는 건 `content/members.json` 의 `name` 과 대조해서 동작합니다.
-하이픈과 띄어쓰기는 무시하므로 `"Moon-Que Lee"` 와 `"Moon Que Lee"` 는 같은 사람으로 봅니다
-(저널마다 표기가 갈려서 그렇습니다).
-
-다만 **철자가 다르면 못 알아봅니다.** `"Gildong Hong"` 과 `"G. Hong"` 은 다른 사람입니다.
-논문에 이니셜로 실렸다면 구성원 이름 쪽을 그 표기에 맞추거나, 강조를 포기해야 합니다.
 
 ---
 
@@ -107,7 +99,7 @@ git을 설치하지 않아도 됩니다.
 | 항목 | 설명 |
 |---|---|
 | `role` | `pi` `postdoc` `phd` `ms` `undergrad` `staff` `alumni` 중 하나. 이 순서대로 화면에 묶입니다 |
-| `photo` | 사진이 없으면 `null`. 있으면 아래 "사진 넣기" 참고 |
+| `photo` | 사진이 없으면 `null` (빈 자리에 사람 모양 그림이 나갑니다). 있으면 아래 "사진 넣기" 참고. 세로 3:4로 잘려 보이니 증명사진처럼 얼굴이 위쪽 가운데 오는 사진이 좋습니다 |
 | `joined` | `"2024-03"` 형태(YYYY-MM). 모르면 `null` |
 | `links` | 없는 것은 `""` 로 두면 화면에서 빠집니다 |
 
@@ -146,19 +138,30 @@ git을 설치하지 않아도 됩니다.
 
 ## 연구 분야
 
-`content/research.json`
+`content/research.json` — **큰 주제(연구 분야)** 아래에 **진행 중인 과제**가 들어갑니다.
+홈에는 주제만 나오고, 연구 페이지에는 주제마다 그 아래 과제가 나옵니다.
 
 ```json
 {
-  "id": "wireless-power",
-  "title": "Wireless Power Transfer",
-  "summary": "두세 문장으로 이 분야를 설명합니다.",
-  "image": "/images/research/wireless-power.jpg",
-  "tags": ["Rectenna", "Metasurface"]
+  "id": "microwave-plasma",
+  "title": { "en": "Microwave Plasma Sources", "ko": "마이크로파 플라즈마" },
+  "summary": { "en": "One or two sentences.", "ko": "한두 문장으로 이 분야를 설명합니다." },
+  "projects": [
+    {
+      "id": "microwave-plasma-source",
+      "title": { "en": "...", "ko": "화합물 반도체 기반 초고주파 플라즈마 소스 개발" },
+      "points": { "en": ["..."], "ko": ["플라즈마 모델링 및 ... 개발"] },
+      "image": { "src": "/images/research/microwave-plasma-source.jpg", "width": 431, "height": 291, "alt": "..." }
+    }
+  ]
 }
 ```
 
-이미지가 없으면 `"image": null`.
+- 진행 중인 과제가 없는 주제는 `"projects": []` 로 두면 설명만 나옵니다.
+  대신 주제에 `"images": [ {...}, {...} ]` 로 사진을 넣으면 연구 페이지 설명 아래에 한 줄로 나오고,
+  홈 카드에는 첫 장을 크게, 다음 두 장을 옆에 붙여 보여 줍니다. 주제 사진이 없으면 홈 카드는 첫 과제의 그림을 씁니다.
+- **과제가 끝나면** 여기서 빼고 `content/past-projects.json` 에 기간과 함께 옮깁니다. 과거 프로젝트는 최신순으로 자동 정렬됩니다.
+- 그림이 없으면 `"image": null`. 있으면 `width`·`height` 에 실제 파일 크기를 적습니다.
 
 ---
 
@@ -174,12 +177,57 @@ git을 설치하지 않아도 됩니다.
 
 ---
 
+## 앨범 사진 올리기
+
+학회 참석·연구실 행사 사진은 Album 페이지에 행사 단위로 모입니다.
+
+1. 사진을 **가로 1600px 이하**로 줄입니다. 휴대폰 원본(수 MB)을 그대로 올리지 않습니다.
+2. `public/images/album/행사이름/` 폴더를 만들어 올립니다. (예: `public/images/album/2025-apmc/`)
+3. `content/album.json` 에 행사를 하나 추가합니다.
+
+```json
+{
+  "id": "2025-apmc",
+  "title": { "en": "APMC 2025", "ko": "APMC 2025 학회 참석" },
+  "date": "2025.11",
+  "photos": [
+    { "src": "/images/album/2025-apmc/poster.jpg", "alt": "A student presenting a poster", "caption": { "en": "Poster session", "ko": "포스터 발표" } },
+    { "src": "/images/album/2025-apmc/group.jpg", "alt": "Lab members in front of the venue" }
+  ]
+}
+```
+
+| 항목 | 설명 |
+|---|---|
+| `date` | `"2025.11"` 또는 `"2025.11.20"`. 최근 행사가 위로 정렬됩니다 |
+| `photos` | **첫 번째 사진이 앨범 목록의 표지**가 됩니다. 단체 사진처럼 행사를 대표하는 사진을 맨 앞에 둡니다 |
+| `alt` | 사진에 무엇이 보이는지 **영어로** 한 문장 (화면낭독기용) |
+| `caption` | 크게 볼 때 아래에 나오는 설명. 없으면 빼도 됩니다 |
+
+사진 순서는 `photos` 에 적은 순서 그대로입니다.
+
+---
+
+## 영어 / 한국어
+
+사이트 상단의 **EN / KO** 버튼으로 언어를 바꿀 수 있습니다. 그래서 화면에 나오는 글은 대부분 두 언어를 함께 적습니다.
+
+```json
+"title": { "en": "Research", "ko": "연구" }
+```
+
+- 한쪽만 고치면 다른 언어 화면에는 예전 내용이 그대로 남습니다. **두 언어를 같이 고쳐 주세요.**
+- 연구실 이름과 논문(`publications.json`)의 제목·저자·게재지는 번역하지 않습니다.
+- 구성원 이름은 `name`(영문)과 `nameKo`(한글)에 따로 적습니다.
+
+---
+
 ## 아직 안 정해진 값 — `TODO:`
 
 값을 모를 때는 지어내지 말고 이렇게 남깁니다.
 
 ```json
-"tagline": "TODO: 확인 필요 — 한 줄 소개"
+"title": { "en": "TODO: 영문 제목", "ko": "TODO: 한글 제목" }
 ```
 
 `TODO:` 로 시작하는 값은 **사이트 화면에 점선 테두리로 눈에 띄게 표시됩니다.** 일부러 그렇게 만들었습니다.

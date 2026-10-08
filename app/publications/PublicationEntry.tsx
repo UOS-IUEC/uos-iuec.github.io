@@ -1,14 +1,15 @@
 import { Fragment, type ReactNode } from "react";
 
 import ContentText from "@/components/ContentText";
+import L from "@/components/L";
 import {
-  isMemberName,
   isTodo,
   PUBLICATION_TYPE_LABEL,
+  type Localized,
   type Publication,
 } from "@/lib/content";
 
-type EntryLink = { key: string; label: string; href: string };
+type EntryLink = { key: string; label: Localized; href: string };
 type CitationPart = { key: string; node: ReactNode };
 
 /** 빈 문자열인 필드는 링크로 그리지 않는다. */
@@ -19,13 +20,15 @@ function entryLinks(publication: Publication): EntryLink[] {
   if (publication.doi) {
     links.push({
       key: "doi",
-      label: "DOI",
+      label: { en: "DOI", ko: "DOI" },
       href: `https://doi.org/${publication.doi}`,
     });
   }
-  if (publication.url) links.push({ key: "url", label: "Publisher", href: publication.url });
-  if (publication.pdf) links.push({ key: "pdf", label: "PDF", href: publication.pdf });
-  if (publication.code) links.push({ key: "code", label: "Code", href: publication.code });
+  // 출판사 페이지(url)는 목록에 따로 걸지 않는다. DOI 링크가 같은 곳으로 간다.
+  if (publication.pdf) links.push({ key: "pdf", label: { en: "PDF", ko: "PDF" }, href: publication.pdf });
+  if (publication.code) {
+    links.push({ key: "code", label: { en: "Code", ko: "코드" }, href: publication.code });
+  }
 
   return links;
 }
@@ -70,7 +73,7 @@ export default function PublicationEntry({ publication }: { publication: Publica
     <article>
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs font-medium text-ink-muted">
-          {PUBLICATION_TYPE_LABEL[publication.type]}
+          <L {...PUBLICATION_TYPE_LABEL[publication.type]} fit="center" />
         </span>
         {publication.award ? (
           <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent">
@@ -83,16 +86,12 @@ export default function PublicationEntry({ publication }: { publication: Publica
         <ContentText value={publication.title} />
       </h3>
 
-      {/* 연구실 구성원만 강조한다. 판정은 여기서 하고 JSON에는 마크업을 넣지 않는다 */}
-      <p className="mt-1.5 text-sm leading-relaxed">
+      {/* 저자는 게재된 순서·표기 그대로, 모두 같은 굵기로 적는다 */}
+      <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
         {publication.authors.map((author, index) => (
           <Fragment key={`${author}-${index}`}>
-            {index > 0 ? <span className="text-ink-muted">, </span> : null}
-            <span
-              className={isMemberName(author) ? "font-medium text-ink" : "text-ink-muted"}
-            >
-              <ContentText value={author} />
-            </span>
+            {index > 0 ? ", " : null}
+            <ContentText value={author} />
           </Fragment>
         ))}
       </p>
@@ -114,10 +113,10 @@ export default function PublicationEntry({ publication }: { publication: Publica
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`${link.label} for ${linkContext}`}
+                aria-label={`${link.label.en} for ${linkContext}`}
                 className="text-sm font-medium text-accent underline-offset-4 hover:underline"
               >
-                {link.label}
+                <L {...link.label} fit="center" />
               </a>
             </li>
           ))}

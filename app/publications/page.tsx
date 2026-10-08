@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import Container from "@/components/Container";
+import L from "@/components/L";
 import PageHeader from "@/components/PageHeader";
 import {
   PUBLICATION_TYPE_LABEL,
@@ -14,7 +15,7 @@ import PublicationBrowser from "./PublicationBrowser";
 /** 설명에는 TODO가 섞이면 안 되므로 확정된 소속 정보만 조합한다. */
 export const metadata: Metadata = {
   title: "Publications",
-  description: `Journal articles, conference papers and other output from the ${site.name}, ${site.department}, ${site.university}.`,
+  description: `Journal articles, conference papers and other output from the ${site.name}, ${site.department.en}, ${site.university.en}.`,
 };
 
 export default function PublicationsPage() {
@@ -30,14 +31,13 @@ export default function PublicationsPage() {
   return (
     <>
       <PageHeader
-        title="Publications"
-        lead="Peer-reviewed articles, conference papers and other output from the group, listed by year with the most recent first."
+        title={{ en: "Publications", ko: "논문" }}
       />
 
       <Container className="py-12 sm:py-16">
         {groups.length === 0 ? (
           <p className="rounded-lg border border-dashed border-line bg-surface px-5 py-12 text-center text-ink-muted">
-            Publications will be listed here.
+            <L en="Publications will be listed here." ko="논문 목록이 이곳에 표시됩니다." />
           </p>
         ) : (
           <PublicationBrowser groups={groups} types={types} />

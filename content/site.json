@@ -1,17 +1,36 @@
 {
   "name": "Intelligent μWave Energy Center",
   "shortName": "IUEC",
-  "nameKo": "지능형 전파-에너지 연구센터",
-  "department": "Dept. of Electrical and Computer Engineering",
-  "university": "University of Seoul",
-  "tagline": "TODO: 확인 필요 — 연구실을 한 줄로 소개하는 문구",
+  "nameKo": "지능형 전파 에너지 연구 센터",
+  "department": {
+    "en": "School of Electrical and Computer Engineering",
+    "ko": "전자전기컴퓨터공학부"
+  },
+  "university": {
+    "en": "University of Seoul",
+    "ko": "서울시립대학교"
+  },
+  "universityLogo": "/images/uos-logo.png",
+  "tagline": {
+    "en": "The Intelligent μWave Energy Center develops technologies that generate and control microwave energy: solid-state microwave energy systems for ISM applications, microwave plasma sources, and high-power electromagnetic pulse (EMP) systems.",
+    "ko": "지능형 전파 에너지 연구 센터는 마이크로파 에너지를 만들고 다루는 기술을 연구하며, 반도체 전력증폭기 기반의 ISM 마이크로파 에너지 시스템, 초고주파 플라즈마 소스, 고출력 전자기파(EMP) 기술을 개발하고 있습니다."
+  },
+  "heroImage": {
+    "src": "/images/site/it-building.jpg",
+    "alt": "Information Technology Building, University of Seoul, where the lab is located"
+  },
   "email": "mqlee@uos.ac.kr",
-  "phone": "",
+  "phone": "02-6490-5689",
   "address": {
-    "line1": "Room 414, Information Technology Building (정보기술관 414호)",
-    "line2": "163 Seoulsiripdae-ro, Dongdaemun-gu",
-    "city": "Seoul",
-    "country": "Republic of Korea"
+    "en": [
+      "Room 414, Information Technology Building",
+      "163 Seoulsiripdae-ro, Dongdaemun-gu",
+      "Seoul, Republic of Korea"
+    ],
+    "ko": [
+      "서울특별시 동대문구 서울시립대로 163",
+      "서울시립대학교 정보기술관 414호"
+    ]
   },
   "links": {
     "github": "https://github.com/UOS-IUEC",

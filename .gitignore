@@ -39,6 +39,8 @@ yarn-error.log*
 # agent tooling state (local only)
 .omc/
 .claude/settings.local.json
+/graft/
+/.ignore
 
 # 원본 이미지 보관용 (리사이즈본만 public/ 에 커밋)
 /assets-raw/

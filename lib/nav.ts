@@ -12,12 +12,13 @@ export const NAV_ITEMS: ReadonlyArray<NavItem> = [
   { href: "/research", label: { en: "Research", ko: "연구" } },
   { href: "/publications", label: { en: "Publications", ko: "논문" } },
   {
-    href: "/members",
+    // 구성원은 교수·학생 두 페이지로 나뉜다. 상위 메뉴를 누르면 첫 하위 페이지로 간다.
+    href: "/members/professor",
     label: { en: "Members", ko: "구성원" },
     children: [
-      { href: "/members#professor", label: { en: "Professor", ko: "교수" } },
-      { href: "/members#students", label: { en: "Students", ko: "학생" } },
+      { href: "/members/professor", label: { en: "Professor", ko: "교수" } },
+      { href: "/members/students", label: { en: "Students", ko: "학생" } },
     ],
   },
-  { href: "/contact", label: { en: "Contact", ko: "연락처" } },
+  { href: "/album", label: { en: "Album", ko: "앨범" } },
 ];

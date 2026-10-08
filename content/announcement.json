@@ -4,28 +4,22 @@
     "enabled": true,
     "badge": { "en": "Recruiting", "ko": "모집 중" },
     "title": {
-      "en": "Recruiting M.S. and Ph.D. Students",
-      "ko": "석사·박사과정 대학원생 모집"
+      "en": "M.S. and Ph.D. Students",
+      "ko": "석사·박사과정 대학원생"
     },
     "target": null,
     "details": [],
-    "actions": [
-      { "label": { "en": "View research topics", "ko": "연구주제 보기" }, "href": "/research/" },
-      { "label": { "en": "Contact us", "ko": "문의하기" }, "href": "/contact/" }
-    ]
+    "actions": []
   },
   {
     "id": "undergrad-recruit",
     "enabled": true,
     "badge": { "en": "Recruiting", "ko": "모집 중" },
     "title": {
-      "en": "Undergraduate Research Students Wanted",
-      "ko": "연구주제참여 학부연구생 모집"
+      "en": "Undergraduate Research Students",
+      "ko": "연구주제참여 학부연구생"
     },
-    "target": {
-      "en": "Juniors, seniors, and students on leave",
-      "ko": "3학년, 4학년, 휴학생"
-    },
+    "target": null,
     "details": [
       {
         "label": { "en": "Eligibility", "ko": "지원 자격" },
@@ -49,9 +43,6 @@
         }
       }
     ],
-    "actions": [
-      { "label": { "en": "View research topics", "ko": "연구주제 보기" }, "href": "/research/" },
-      { "label": { "en": "Contact us", "ko": "문의하기" }, "href": "/contact/" }
-    ]
+    "actions": []
   }
 ]

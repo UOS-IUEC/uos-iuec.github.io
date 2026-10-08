@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import L, { LBlock } from "@/components/L";
+import L from "@/components/L";
 import type { Localized, Professor } from "@/lib/content";
 
 type TimelineRow = { key: string; when: string; text: Localized };
@@ -11,9 +11,9 @@ function Timeline({ id, title, rows }: { id: string; title: Localized; rows: Tim
 
   return (
     <section aria-labelledby={id}>
-      <h4 id={id} className="border-b border-line pb-2 text-sm font-semibold text-ink">
+      <h3 id={id} className="border-b border-line pb-2 text-sm font-semibold text-ink">
         <L {...title} />
-      </h4>
+      </h3>
       <ul className="mt-3 space-y-2.5">
         {rows.map((row) => (
           <li
@@ -31,34 +31,11 @@ function Timeline({ id, title, rows }: { id: string; title: Localized; rows: Tim
   );
 }
 
-function Interests({ items }: { items: string[] }) {
-  if (items.length === 0) return null;
-  return (
-    <ul className="flex flex-wrap gap-2">
-      {items.map((interest) => (
-        <li
-          key={interest}
-          className="rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent"
-        >
-          {interest}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-/** Members 상단의 교수 소개. 언어는 헤더의 전환 버튼을 따른다. */
+/** Professor 페이지 본문 — 사진, 이름·직함, 경력·학력·수상. 언어는 헤더의 전환 버튼을 따른다. */
 export default function ProfessorProfile({ professor }: { professor: Professor }) {
   return (
-    <section id="professor" aria-labelledby="professor-heading" className="scroll-mt-24">
-      <h2
-        id="professor-heading"
-        className="border-b border-line pb-3 text-xl font-semibold tracking-tight sm:text-2xl"
-      >
-        <L en="Professor" ko="교수" />
-      </h2>
-
-      <div className="mt-8 grid gap-8 md:grid-cols-[14rem_1fr] md:gap-12">
+    <div>
+      <div className="grid gap-8 md:grid-cols-[14rem_1fr] md:gap-12">
         {professor.photo ? (
           <Image
             src={professor.photo.src}
@@ -71,11 +48,11 @@ export default function ProfessorProfile({ professor }: { professor: Professor }
         ) : null}
 
         <div className="min-w-0">
-          <h3 className="text-2xl font-semibold tracking-tight">
+          <h2 className="text-2xl font-semibold tracking-tight">
             <L {...professor.name} />
-          </h3>
+          </h2>
           <p className="mt-1 break-keep text-ink-muted">
-            <L {...professor.title} /> &middot; <L {...professor.affiliation} />
+            <L {...professor.title} fit="inline" /> &middot; <L {...professor.affiliation} fit="inline" />
           </p>
           {professor.email ? (
             <p className="mt-2 text-sm">
@@ -84,16 +61,6 @@ export default function ProfessorProfile({ professor }: { professor: Professor }
               </a>
             </p>
           ) : null}
-
-          <section aria-labelledby="professor-interests" className="mt-6">
-            <h4 id="professor-interests" className="sr-only">
-              <L en="Research Interests" ko="관심 분야" />
-            </h4>
-            <LBlock
-              en={<Interests items={professor.interests.en} />}
-              ko={<Interests items={professor.interests.ko} />}
-            />
-          </section>
 
           <div className="mt-10 space-y-10">
             <Timeline
@@ -126,6 +93,6 @@ export default function ProfessorProfile({ professor }: { professor: Professor }
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

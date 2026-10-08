@@ -1,16 +1,8 @@
-import Link from "next/link";
-
+import ContactDetails, { hasContactDetails } from "@/components/ContactDetails";
 import Container from "@/components/Container";
 import ContentText from "@/components/ContentText";
 import L, { LBlock } from "@/components/L";
-import { isTodo, site, type Localized } from "@/lib/content";
-import { NAV_ITEMS } from "@/lib/nav";
-
-const EXTERNAL_LINKS: ReadonlyArray<{ key: "university" | "github" | "scholar"; label: Localized }> = [
-  { key: "university", label: site.university },
-  { key: "github", label: { en: "GitHub", ko: "GitHub" } },
-  { key: "scholar", label: { en: "Google Scholar", ko: "Google Scholar" } },
-];
+import { site } from "@/lib/content";
 
 function AddressLines({ lines }: { lines: string[] }) {
   return (
@@ -24,17 +16,16 @@ function AddressLines({ lines }: { lines: string[] }) {
   );
 }
 
+/** 페이지 이동은 헤더가 맡으므로 푸터에는 연구실 정보와 연락처만 둔다. */
 export default function SiteFooter() {
-  const external = EXTERNAL_LINKS.map((link) => ({
-    ...link,
-    href: site.links[link.key] ?? "",
-  })).filter((link) => link.href !== "" && !isTodo(link.href));
-
   return (
     <footer className="mt-20 border-t border-line bg-surface">
       <Container className="grid gap-10 py-12 sm:grid-cols-2">
         <div>
-          <p className="font-semibold tracking-tight">{site.name}</p>
+          {/* 헤더·홈 제목은 영문 명칭을 쓰고, 푸터는 한국어 화면에서 국문 명칭을 쓴다 (CLAUDE.md §0) */}
+          <p className="font-semibold tracking-tight">
+            <L en={site.name} ko={site.nameKo || site.name} />
+          </p>
           <p className="mt-1 text-sm text-ink-muted">
             <L {...site.department} />
             <br />
@@ -46,50 +37,17 @@ export default function SiteFooter() {
               en={<AddressLines lines={site.address.en} />}
               ko={<AddressLines lines={site.address.ko} />}
             />
-            {site.email ? (
-              <div className="pt-1">
-                {isTodo(site.email) ? (
-                  <ContentText value={site.email} />
-                ) : (
-                  <a className="hover:text-accent" href={`mailto:${site.email}`}>
-                    {site.email}
-                  </a>
-                )}
-              </div>
-            ) : null}
           </address>
         </div>
 
-        <div className="sm:justify-self-end">
-          <nav aria-label="Footer">
-            <ul className="space-y-2 text-sm">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <Link className="text-ink-muted hover:text-accent" href={item.href}>
-                    <L {...item.label} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {external.length > 0 ? (
-            <ul className="mt-6 space-y-2 text-sm">
-              {external.map((link) => (
-                <li key={link.key}>
-                  <a
-                    className="text-ink-muted hover:text-accent"
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <L {...link.label} />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
+        {hasContactDetails() ? (
+          <div className="sm:justify-self-end">
+            <p className="font-semibold tracking-tight">
+              <L en="Contact" ko="연락처" />
+            </p>
+            <ContactDetails className="mt-2 space-y-1 text-sm text-ink-muted" />
+          </div>
+        ) : null}
       </Container>
 
       <Container className="border-t border-line py-6 text-xs text-ink-muted">

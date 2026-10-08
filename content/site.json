@@ -1,7 +1,7 @@
 {
   "name": "Intelligent μWave Energy Center",
   "shortName": "IUEC",
-  "nameKo": "지능형 전파-에너지 연구센터",
+  "nameKo": "지능형 전파 에너지 연구 센터",
   "department": {
     "en": "School of Electrical and Computer Engineering",
     "ko": "전자전기컴퓨터공학부"
@@ -12,25 +12,15 @@
   },
   "universityLogo": "/images/uos-logo.png",
   "tagline": {
-    "en": "Our lab's research interests include:",
-    "ko": "연구실의 주요 연구 분야는 다음과 같습니다."
+    "en": "The Intelligent μWave Energy Center develops technologies that generate and control microwave energy: solid-state microwave energy systems for ISM applications, microwave plasma sources, and high-power electromagnetic pulse (EMP) systems.",
+    "ko": "지능형 전파 에너지 연구 센터는 마이크로파 에너지를 만들고 다루는 기술을 연구하며, 반도체 전력증폭기 기반의 ISM 마이크로파 에너지 시스템, 초고주파 플라즈마 소스, 고출력 전자기파(EMP) 기술을 개발하고 있습니다."
   },
-  "taglinePoints": {
-    "en": [
-      "High-frequency/RF/Microwave circuit design",
-      "Radio Frequency Integrated Circuits (RFIC)",
-      "Monolithic Microwave Integrated Circuits (MMIC)",
-      "RF systems"
-    ],
-    "ko": [
-      "고주파/RF/마이크로파 회로 설계",
-      "RF 집적회로 (RFIC)",
-      "단일 칩 마이크로파 집적회로 (MMIC)",
-      "RF 시스템"
-    ]
+  "heroImage": {
+    "src": "/images/site/it-building.jpg",
+    "alt": "Information Technology Building, University of Seoul, where the lab is located"
   },
   "email": "mqlee@uos.ac.kr",
-  "phone": "",
+  "phone": "02-6490-5689",
   "address": {
     "en": [
       "Room 414, Information Technology Building",

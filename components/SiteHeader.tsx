@@ -8,7 +8,7 @@ import { useState } from "react";
 import Container from "@/components/Container";
 import L from "@/components/L";
 import LanguageToggle from "@/components/LanguageToggle";
-import { NAV_ITEMS } from "@/lib/nav";
+import { NAV_ITEMS, type NavItem } from "@/lib/nav";
 
 /**
  * 사이트 이름·로고는 layout.tsx가 lib/content에서 읽어 넘긴다.
@@ -31,6 +31,11 @@ export default function SiteHeader({
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  // 하위 페이지(예: 구성원 → 학생)에 있을 때도 상위 메뉴를 현재 위치로 표시한다
+  const isItemActive = (item: NavItem) =>
+    isActive(item.href) || (item.children ?? []).some((child) => isActive(child.href));
+  // 모바일 하위 메뉴 id. href의 "/"는 id에 어울리지 않아 "-"로 바꾼다.
+  const subMenuId = (item: NavItem) => `mobile-sub${item.href.replace(/\W+/g, "-")}`;
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur">
@@ -66,12 +71,12 @@ export default function SiteHeader({
                 <li key={item.href} className="group relative">
                   <Link
                     href={item.href}
-                    aria-current={isActive(item.href) ? "page" : undefined}
+                    aria-current={isItemActive(item) ? "page" : undefined}
                     className={`rounded px-3 py-2 text-sm transition-colors hover:bg-surface ${
-                      isActive(item.href) ? "font-medium text-accent" : "text-ink-muted"
+                      isItemActive(item) ? "font-medium text-accent" : "text-ink-muted"
                     }`}
                   >
-                    <L {...item.label} />
+                    <L {...item.label} fit="center" />
                   </Link>
                   {item.children ? (
                     // 마우스를 올리거나 키보드로 초점이 들어오면 펼친다. pt-2는 링크와 메뉴 사이 틈을 메워
@@ -82,7 +87,10 @@ export default function SiteHeader({
                           <li key={child.href}>
                             <Link
                               href={child.href}
-                              className="block px-4 py-2 text-sm text-ink-muted hover:bg-surface hover:text-accent"
+                              aria-current={isActive(child.href) ? "page" : undefined}
+                              className={`block px-4 py-2 text-sm hover:bg-surface hover:text-accent ${
+                                isActive(child.href) ? "font-medium text-accent" : "text-ink-muted"
+                              }`}
                             >
                               <L {...child.label} />
                             </Link>
@@ -148,9 +156,9 @@ export default function SiteHeader({
                   <Link
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    aria-current={isActive(item.href) ? "page" : undefined}
+                    aria-current={isItemActive(item) ? "page" : undefined}
                     className={`block flex-1 rounded px-2 py-3 text-sm hover:bg-surface ${
-                      isActive(item.href) ? "font-medium text-accent" : "text-ink-muted"
+                      isItemActive(item) ? "font-medium text-accent" : "text-ink-muted"
                     }`}
                   >
                     <L {...item.label} />
@@ -163,7 +171,7 @@ export default function SiteHeader({
                         setExpanded((current) => (current === item.href ? null : item.href))
                       }
                       aria-expanded={expanded === item.href}
-                      aria-controls={`mobile-sub-${item.href.slice(1)}`}
+                      aria-controls={subMenuId(item)}
                       className="rounded p-3 text-ink-muted hover:bg-surface"
                     >
                       <span className="sr-only">
@@ -190,7 +198,7 @@ export default function SiteHeader({
                 </div>
                 {item.children ? (
                   <ul
-                    id={`mobile-sub-${item.href.slice(1)}`}
+                    id={subMenuId(item)}
                     hidden={expanded !== item.href}
                     className="mb-1 pl-4"
                   >
@@ -199,7 +207,10 @@ export default function SiteHeader({
                         <Link
                           href={child.href}
                           onClick={() => setOpen(false)}
-                          className="block rounded px-2 py-2.5 text-sm text-ink-muted hover:bg-surface"
+                          aria-current={isActive(child.href) ? "page" : undefined}
+                          className={`block rounded px-2 py-2.5 text-sm hover:bg-surface ${
+                            isActive(child.href) ? "font-medium text-accent" : "text-ink-muted"
+                          }`}
                         >
                           <L {...child.label} />
                         </Link>

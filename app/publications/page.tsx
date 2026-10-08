@@ -4,7 +4,6 @@ import Container from "@/components/Container";
 import L from "@/components/L";
 import PageHeader from "@/components/PageHeader";
 import {
-  PUBLICATION_PERIODS,
   PUBLICATION_TYPE_LABEL,
   publicationTypesInUse,
   publicationsByYear,
@@ -33,10 +32,6 @@ export default function PublicationsPage() {
     <>
       <PageHeader
         title={{ en: "Publications", ko: "논문" }}
-        lead={{
-          en: "Peer-reviewed articles, conference papers and other output from the group, listed by year with the most recent first.",
-          ko: "연구실이 발표한 학술지 논문과 학술대회 논문 등을 최신 연도순으로 정리했습니다.",
-        }}
       />
 
       <Container className="py-12 sm:py-16">
@@ -45,7 +40,7 @@ export default function PublicationsPage() {
             <L en="Publications will be listed here." ko="논문 목록이 이곳에 표시됩니다." />
           </p>
         ) : (
-          <PublicationBrowser groups={groups} types={types} periods={PUBLICATION_PERIODS} />
+          <PublicationBrowser groups={groups} types={types} />
         )}
       </Container>
     </>

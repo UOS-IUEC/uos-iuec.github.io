@@ -1,15 +1,9 @@
 import Image from "next/image";
 
+import ContentText from "@/components/ContentText";
 import L, { LBlock } from "@/components/L";
-import type { PastProject, ResearchArea } from "@/lib/content";
-
-/**
- * 분야가 이만큼 이상이면 상단에 바로가기 목록을 붙인다.
- * 항목이 늘어나도 긴 스크롤 없이 원하는 분야로 갈 수 있어야 한다.
- */
-const TOC_MIN_AREAS = 4;
-
-const PATENT_STATUS_LABEL = { filed: "출원", registered: "등록" } as const;
+import type { PastProject, ResearchImage, ResearchProject, ResearchTheme } from "@/lib/content";
+import { isTodo } from "@/lib/todo";
 
 function Points({ points }: { points: string[] }) {
   if (points.length === 0) return null;
@@ -22,94 +16,116 @@ function Points({ points }: { points: string[] }) {
   );
 }
 
+/** 사진 아래 한 줄 설명. 좁은 칸(모바일 3열)에서도 읽히게 작은 글씨로 줄바꿈을 허용한다. */
+function ImageCaption({ image }: { image: ResearchImage }) {
+  if (!image.caption) return null;
+  return (
+    <figcaption className="mt-2 break-keep text-center text-xs leading-snug text-ink-muted sm:text-sm">
+      <L {...image.caption} />
+    </figcaption>
+  );
+}
+
+/** 주제 아래 진행 중인 과제 하나 — 과제명, 내용, 그림. */
+function ProjectArticle({ project }: { project: ResearchProject }) {
+  return (
+    <article
+      id={project.id}
+      // 헤더가 sticky라 앵커로 이동했을 때 제목이 가려지지 않게 여백을 준다
+      className="scroll-mt-24 py-8 first:pt-0 last:pb-0"
+    >
+      <div className="grid gap-6 md:grid-cols-5 md:gap-10">
+        <div className={project.image ? "md:col-span-3" : "md:col-span-5"}>
+          <p className="text-xs font-medium uppercase tracking-wide text-accent">
+            <L en="Current project" ko="진행 과제" fit="inline" />
+          </p>
+          <h3 className="mt-1 break-keep text-lg font-semibold leading-snug tracking-tight">
+            <L {...project.title} />
+          </h3>
+          <LBlock
+            en={<Points points={project.points.en} />}
+            ko={<Points points={project.points.ko} />}
+          />
+        </div>
+
+        {project.image ? (
+          <figure className="md:col-span-2">
+            <Image
+              src={project.image.src}
+              alt={project.image.alt}
+              width={project.image.width}
+              height={project.image.height}
+              className="h-auto w-full rounded-md border border-line"
+            />
+            <ImageCaption image={project.image} />
+          </figure>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
 /**
- * 연구 분야 목록과 과거 프로젝트. 언어는 헤더의 전환 버튼을 따른다(CSS로 전환).
- * 특허는 영문 명칭이 확정되지 않아 한국어 화면에서만 보인다.
+ * 연구 분야(큰 주제)와 그 아래 진행 중인 과제, 맨 아래 과거 프로젝트.
+ * 언어는 헤더의 전환 버튼을 따른다(CSS로 전환).
  */
 export default function ResearchAreas({
-  areas,
+  themes,
   pastProjects,
 }: {
-  areas: ResearchArea[];
+  themes: ResearchTheme[];
   pastProjects: PastProject[];
 }) {
   return (
     <div>
-      {areas.length >= TOC_MIN_AREAS ? (
-        <nav
-          aria-label="Research areas / 연구 분야"
-          className="mb-12 rounded-lg border border-line bg-surface p-5"
-        >
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-            <L en="On this page" ko="바로가기" />
-          </h2>
-          <ol className="mt-3 list-decimal space-y-2 pl-5">
-            {areas.map((area) => (
-              <li key={area.id} className="text-sm text-ink-muted">
-                <a href={`#${area.id}`} className="text-ink hover:text-accent">
-                  <L {...area.title} />
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      ) : null}
-
-      <div className="divide-y divide-line">
-        {areas.map((area) => (
-          <article
-            key={area.id}
-            id={area.id}
-            // 헤더가 sticky라 앵커로 이동했을 때 제목이 가려지지 않게 여백을 준다
-            className="scroll-mt-24 py-10 first:pt-0 last:pb-0 sm:py-14"
+      <div className="space-y-16 sm:space-y-20">
+        {themes.map((theme) => (
+          <section
+            key={theme.id}
+            id={theme.id}
+            aria-labelledby={`${theme.id}-title`}
+            className="scroll-mt-24"
           >
-            <div className="grid gap-6 md:grid-cols-5 md:gap-10">
-              <div className={area.image ? "md:col-span-3" : "md:col-span-5"}>
-                <h2 className="break-keep text-xl font-semibold leading-snug tracking-tight sm:text-2xl">
-                  <L {...area.title} />
-                </h2>
+            <h2
+              id={`${theme.id}-title`}
+              className="border-b border-line pb-3 text-xl font-semibold tracking-tight sm:text-2xl"
+            >
+              <L {...theme.title} />
+            </h2>
+            <p className="mt-4 max-w-3xl break-keep leading-relaxed text-ink-muted">
+              <L {...theme.summary} />
+            </p>
 
-                <LBlock en={<Points points={area.points.en} />} ko={<Points points={area.points.ko} />} />
+            {theme.images.length > 0 ? (
+              // 사진마다 비율이 달라 같은 세로형 틀에 맞춰 잘라 한 줄로 고르게 놓는다
+              <ul className="mt-8 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
+                {theme.images.map((image) => (
+                  <li key={image.src}>
+                    <figure>
+                      <div className="relative aspect-[4/5] overflow-hidden rounded-md border border-line">
+                        <Image
+                          src={image.src}
+                          alt={image.alt}
+                          fill
+                          sizes="(min-width: 768px) 250px, 33vw"
+                          className="object-cover"
+                        />
+                      </div>
+                      <ImageCaption image={image} />
+                    </figure>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
 
-                {area.patents.length > 0 ? (
-                  <section
-                    lang="ko"
-                    aria-labelledby={`${area.id}-patents`}
-                    className="mt-6 hidden ko:block"
-                  >
-                    <h3 id={`${area.id}-patents`} className="text-sm font-semibold text-ink">
-                      특허
-                    </h3>
-                    <ul className="mt-2 space-y-1.5">
-                      {area.patents.map((patent) => (
-                        <li
-                          key={patent.title}
-                          className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-sm"
-                        >
-                          <span className="break-keep text-ink">{patent.title}</span>
-                          <span className="rounded bg-accent-soft px-1.5 py-0.5 text-xs text-accent">
-                            {PATENT_STATUS_LABEL[patent.status]} {patent.year}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                ) : null}
+            {theme.projects.length > 0 ? (
+              <div className="mt-8 divide-y divide-line">
+                {theme.projects.map((project) => (
+                  <ProjectArticle key={project.id} project={project} />
+                ))}
               </div>
-
-              {area.image ? (
-                <figure className="md:col-span-2">
-                  <Image
-                    src={area.image.src}
-                    alt={area.image.alt}
-                    width={area.image.width}
-                    height={area.image.height}
-                    className="h-auto w-full rounded-md border border-line"
-                  />
-                </figure>
-              ) : null}
-            </div>
-          </article>
+            ) : null}
+          </section>
         ))}
       </div>
 
@@ -146,7 +162,14 @@ export default function ResearchAreas({
                   <L {...project.title} />
                 </span>
                 <span className="shrink-0 text-sm tabular-nums text-ink-muted">
-                  {project.start} – {project.end}
+                  {/* 기간을 모르면 TODO 하나만 눈에 띄게 보여 준다 */}
+                  {isTodo(project.start) || isTodo(project.end) ? (
+                    <ContentText value={isTodo(project.start) ? project.start : project.end} />
+                  ) : (
+                    <>
+                      {project.start} – {project.end}
+                    </>
+                  )}
                 </span>
               </li>
             ))}

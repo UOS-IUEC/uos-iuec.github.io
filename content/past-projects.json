@@ -374,5 +374,13 @@
       "en": "[Ezbaro] Direct-Conversion Multi-Port Transceiver Architecture for Integrated Radar and Communication Mode",
       "ko": "[Ezbaro]레이다 및 통신 통합 모드를 위한 직접변환 Multi-port 송수신 구조"
     }
+  },
+  {
+    "start": "2023.04.01",
+    "end": "2025.12.31",
+    "title": {
+      "en": "Development of Alzheimer's Treatment Technology Using Electromagnetic Waves",
+      "ko": "전자기파를 이용한 알츠하이머 치료 기술 개발"
+    }
   }
 ]

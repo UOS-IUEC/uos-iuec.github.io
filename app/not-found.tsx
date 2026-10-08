@@ -33,13 +33,13 @@ export default function NotFound() {
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <li>
             <Link href="/" className="text-accent hover:underline">
-              <L en="Home" ko="홈" />
+              <L en="Home" ko="홈" fit="center" />
             </Link>
           </li>
           {NAV_ITEMS.map((item) => (
             <li key={item.href}>
               <Link href={item.href} className="text-accent hover:underline">
-                <L {...item.label} />
+                <L {...item.label} fit="center" />
               </Link>
             </li>
           ))}
